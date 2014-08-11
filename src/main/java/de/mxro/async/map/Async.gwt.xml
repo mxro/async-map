@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2011 Max Erik Rohde http://www.mxro.de All rights reserved. -->
+<module rename-to='async'>
+	<!-- Inherit the core Web Toolkit stuff. -->
+	<inherits name='com.google.gwt.user.User' />
+
+	<inherits name='de.mxro.fn.Fn' />
+	<!-- Other module inherits -->
+
+	<!-- Specify the app entry point class. -->
+	<entry-point class='de.mxro.async.internal.DummyEntryPoint' />
+
+	<!-- Specify the paths for translatable code -->
+	<source path=''>
+		<exclude name="**/jre/**" />
+	</source>
+
+</module>

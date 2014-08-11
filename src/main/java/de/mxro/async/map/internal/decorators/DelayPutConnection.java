@@ -22,7 +22,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	private final PersistedMap<K, V> decorated;
 	private final int delay;
 	private final Concurrency concurrency;
-	private final Map<String, List<PutOperation<K, V>>> pendingPuts;
+	private final Map<K, List<PutOperation<K, V>>> pendingPuts;
 	private Boolean timerActive = false;
 	private SimpleTimer timer = null;
 
@@ -53,25 +53,15 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	@Override
 	public void put(K key, V value, SimpleCallback callback) {
 		synchronized (pendingPuts) {
-
-			final PutOperation<K,V> putOperation = new PutOperation<K, V>(key, value, callback);
 			
 			if (!pendingPuts.containsKey(key)) {
 				pendingPuts.put(key, new LinkedList<PutOperation<K,V>>());
 			}
 			
-			if (pendingPuts.containsKey(key)) {
-				
-				
-				PendingPut put = pendingPuts.get(key);
-				put.obj = value;
-				put.callback.add(callback);
-			} else {
-				PendingPut put = new PendingPut();
-				put.obj = value;
-				put.callback.add(callback);
-				pendingPuts.put(key, put);
-			}
+			final PutOperation<K,V> putOperation = new PutOperation<K, V>(key, value, callback);
+			
+			pendingPuts.get(key).add(putOperation);
+			
 		}
 
 		synchronized (timerActive) {

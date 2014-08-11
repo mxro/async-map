@@ -16,12 +16,12 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 	private final AsyncMap<K, V> decorated;
 
 	@Override
-	public void put(String key, V value, SimpleCallback callback) {
+	public void put(K key, V value, SimpleCallback callback) {
 		decorated.put(key, value, callback);
 	}
 
 	@Override
-	public void get(String key, ValueCallback<V> callback) {
+	public void get(K key, ValueCallback<V> callback) {
 		get(key, callback, true);
 	}
 

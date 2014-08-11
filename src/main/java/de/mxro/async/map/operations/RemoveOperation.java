@@ -8,17 +8,17 @@ import de.mxro.async.map.AsyncMap;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class RemoveOperation {
+public class RemoveOperation<K> {
 
-	private final String keyOfEntryToRemove;
+	private final K key;
 
-	public String getKeyOfEntryToRemove() {
-		return keyOfEntryToRemove;
+	public K getKey() {
+		return key;
 	}
 
-	public RemoveOperation(String keyOfEntryToRemove) {
+	public RemoveOperation(K key) {
 		super();
-		this.keyOfEntryToRemove = keyOfEntryToRemove;
+		this.key = key;
 	}
 
 }

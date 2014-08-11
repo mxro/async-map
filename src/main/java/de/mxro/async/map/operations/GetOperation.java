@@ -1,6 +1,7 @@
 package de.mxro.async.map.operations;
 
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.map.AsyncMap;
 
 /**
  * An object representation of a Get operation on an asynchronous map.
@@ -8,6 +9,7 @@ import de.mxro.async.callbacks.ValueCallback;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  * @param <V>
+ * @see AsyncMap
  */
 public class GetOperation<K, V> {
 

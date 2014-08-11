@@ -3,12 +3,11 @@ package de.mxro.async.map.internal.decorators;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
-import de.mxro.async.map.MapConnection;
 
 /**
- * Use in case seralizations can get outdated with an update in a client cache.
+ * <p>Use in case seralizations can get outdated in a cache.
  * 
- * @author mxro
+ * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
 public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V> {
@@ -58,6 +57,14 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 	}
 
 
+	
+	
+	@Override
+	public void remove(K key, SimpleCallback callback) {
+		decorated.remove(key, callback);
+	}
+
+	
 	@Override
 	public V getSync(K key) {
 		try {
@@ -91,12 +98,18 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 		return decorated.getSync(key);
 	}
 	
+	
+	
+
 	@Override
-	public void remove(K key, SimpleCallback callback) {
-		decorated.remove(key, callback);
+	public void putSync(K key, V value) {
+		decorated.putSync(key, value);
 	}
 
-	
+	@Override
+	public void removeSync(K key, V value) {
+		decorated.removeSync(key, value);
+	}
 
 	public PurgeInvalidNodesMapConnection(AsyncMap<K, V> decorated) {
 		super();

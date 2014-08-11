@@ -2,9 +2,8 @@ package de.mxro.async.map.internal.decorators;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.map.PureAsyncMap;
+import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.MapConnection;
-import de.mxro.async.map.PureSyncMap;
 
 /**
  * Use in case seralizations can get outdated with an update in a client cache.
@@ -12,17 +11,17 @@ import de.mxro.async.map.PureSyncMap;
  * @author mxro
  * 
  */
-public final class PurgeInvalidNodesMapConnection<K, V> implements PureAsyncMap<K, V>, PureSyncMap<K, V> {
+public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V> {
 
-	private final MapConnection<T> decorated;
+	private final AsyncMap<K, V> decorated;
 
 	@Override
-	public void put(String key, T value, SimpleCallback callback) {
+	public void put(String key, V value, SimpleCallback callback) {
 		decorated.put(key, value, callback);
 	}
 
 	@Override
-	public void get(String key, ValueCallback<T> callback) {
+	public void get(String key, ValueCallback<V> callback) {
 		get(key, callback, true);
 	}
 

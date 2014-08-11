@@ -51,10 +51,15 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	 */
 
 	@Override
-	public void put(String key, Object value, SimpleCallback callback) {
+	public void put(K key, V value, SimpleCallback callback) {
 		synchronized (pendingPuts) {
 
+			final PutOperation<K,V> putOperation = new PutOperation<K, V>(key, value, callback);
+			
+			
 			if (pendingPuts.containsKey(key)) {
+				
+				
 				PendingPut put = pendingPuts.get(key);
 				put.obj = value;
 				put.callback.add(callback);

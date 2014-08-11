@@ -87,7 +87,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 		}
 	}
 
-	private final class MyEntry<K, V> implements Map.Entry<K, V> {
+	private static final class MyEntry<K, V> implements Map.Entry<K, V> {
 	    private final K key;
 	    private V value;
 

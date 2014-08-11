@@ -1,6 +1,6 @@
 package de.mxro.async.map;
 
-public interface SyncMap<K, V> {
+public interface PureSyncMap<K, V> {
 
 	public V getSync(K key);
 

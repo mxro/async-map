@@ -2,7 +2,9 @@ package de.mxro.async.map.internal.decorators;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.map.PureAsyncMap;
 import de.mxro.async.map.MapConnection;
+import de.mxro.async.map.PureSyncMap;
 
 /**
  * Use in case seralizations can get outdated with an update in a client cache.
@@ -10,7 +12,7 @@ import de.mxro.async.map.MapConnection;
  * @author mxro
  * 
  */
-public final class PurgeInvalidNodesMapConnection<T> implements MapConnection<T> {
+public final class PurgeInvalidNodesMapConnection<K, V> implements PureAsyncMap<K, V>, PureSyncMap<K, V> {
 
 	private final MapConnection<T> decorated;
 

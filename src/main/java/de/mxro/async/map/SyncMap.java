@@ -1,11 +1,11 @@
 package de.mxro.async.map;
 
-public interface SyncMap<T> {
+public interface SyncMap<V> {
 
-	public T getSync(String key);
+	public V getSync(String key);
 
-	public void putSync(String key, T value);
+	public void putSync(String key, V value);
 
-	public void removeSync(String key, T value);
+	public void removeSync(String key, V value);
 
 }

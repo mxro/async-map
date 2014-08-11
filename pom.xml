@@ -23,9 +23,11 @@
 	<!-- Dependent Modules -->
 	<dependencies>
 
+
+
 		<dependency>
-			<groupId>de.mxro.async</groupId>
-			<artifactId>async-api</artifactId>
+			<groupId>de.mxro.service</groupId>
+			<artifactId>service-api</artifactId>
 			<version>[0.0.1,)</version>
 		</dependency>
 
@@ -182,6 +184,7 @@
 								<links>
 									<link>http://modules.appjangle.com/fn-api/latest/apidocs/</link>
 									<link>http://modules.appjangle.com/async-api/latest/apidocs/</link>
+									<link>http://modules.appjangle.com/service-api/latest/apidocs/</link>
 								</links>
 							</configuration>
 						</plugin>

@@ -1,8 +1,9 @@
 package de.mxro.async.map;
 
 import de.mxro.async.callbacks.SimpleCallback;
+import de.mxro.service.Service;
 
-public interface PersistedMap {
+public interface PersistedMap extends Service {
 
 	/**
 	 * Assures that a connection to the persistence medium is established and
@@ -10,7 +11,7 @@ public interface PersistedMap {
 	 * 
 	 * @param callback
 	 */
-	public void init(SimpleCallback callback);
+	public void start(SimpleCallback callback);
 
 	/**
 	 * <p>
@@ -20,7 +21,7 @@ public interface PersistedMap {
 	 * 
 	 * @param callback
 	 */
-	public void close(SimpleCallback callback);
+	public void stop(SimpleCallback callback);
 
 	/**
 	 * Assures pending changes are written to persistence medium.

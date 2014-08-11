@@ -1,9 +1,9 @@
 package de.mxro.async.map.operations;
 
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.PureAsyncMap;
 
 /**
- * An object representation of a remove operation on an {@link AsyncMap}.
+ * An object representation of a remove operation on an {@link PureAsyncMap}.
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *

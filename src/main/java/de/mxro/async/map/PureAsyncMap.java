@@ -13,7 +13,7 @@ import de.mxro.async.callbacks.ValueCallback;
  * @param <K>
  * @param <V>
  */
-public interface AsyncMap<K, V> {
+public interface PureAsyncMap<K, V> {
 
 	public void put(K key, V value, SimpleCallback callback);
 

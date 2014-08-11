@@ -7,25 +7,30 @@ import de.mxro.async.callbacks.SimpleCallback;
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
- * @param <T>
+ * @param <V>
  */
-public class PutOperation<T> {
+public class PutOperation<K, V> {
 
-	private final String key;
-	private final T valueToBePut;
+	private final K key;
+	private final V value;
 	private final SimpleCallback callback;
 
-	public T getValueToBePut() {
-		return valueToBePut;
+	public K getKey() {
+		return key;
+	}
+
+	public V getValue() {
+		return value;
 	}
 
 	public SimpleCallback getCallback() {
 		return callback;
 	}
 
-	public PutOperation(T valueToBePut, SimpleCallback callback) {
+	public PutOperation(K key, V value, SimpleCallback callback) {
 		super();
-		this.valueToBePut = valueToBePut;
+		this.key = key;
+		this.value = value;
 		this.callback = callback;
 	}
 

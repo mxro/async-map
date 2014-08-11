@@ -5,7 +5,7 @@ import de.mxro.async.callbacks.ValueCallback;
 
 /**
  * <p>
- * A map for which values can be retrieved and set using an asynchronous
+ * A map for which values can only be retrieved and set using an asynchronous
  * interface.
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>

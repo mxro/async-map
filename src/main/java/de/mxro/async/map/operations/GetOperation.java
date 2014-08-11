@@ -9,16 +9,22 @@ import de.mxro.async.callbacks.ValueCallback;
  *
  * @param <V>
  */
-public class GetOperation<V> {
+public class GetOperation<K, V> {
 
+	private final K key;
 	private final ValueCallback<V> callback;
 
 	public ValueCallback<V> getCallback() {
 		return callback;
 	}
 
-	public GetOperation(ValueCallback<V> callback) {
+	public K getKey() {
+		return key;
+	}
+
+	public GetOperation(K key, ValueCallback<V> callback) {
 		super();
+		this.key = key;
 		this.callback = callback;
 	}
 

@@ -12,15 +12,17 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.flow.CallbackLatch;
 import de.mxro.async.map.MapConnection;
+import de.mxro.async.map.PersistedMap;
+import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
 
-public class DelayPutConnection<T> implements MapConnection<T> {
+public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
-	private final MapConnection<T> decorated;
+	private final PersistedMap<K, V> decorated;
 	private final int delay;
 	private final Concurrency concurrency;
-	private final Map<String, PendingPut<T>> pendingPuts;
+	private final Map<String, List<PutOperation<K, V>>> pendingPuts;
 	private Boolean timerActive = false;
 	private SimpleTimer timer = null;
 

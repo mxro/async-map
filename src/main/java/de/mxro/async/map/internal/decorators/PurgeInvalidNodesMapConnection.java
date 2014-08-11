@@ -27,7 +27,7 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 
 	
 	
-	private final void get(String key, ValueCallback<T> callback, boolean firstTry) {
+	private final void get(K key, ValueCallback<V> callback, boolean firstTry) {
 		try {
 			decorated.get(key, callback);		
 		} catch (Throwable t) {
@@ -40,7 +40,7 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 
 	}
 
-	private final void deleteAndReget(final String key, final ValueCallback<T> callback) {
+	private final void deleteAndReget(final K key, final ValueCallback<V> callback) {
 		remove(key, new SimpleCallback() {
 
 			@Override
@@ -59,9 +59,9 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 
 
 	@Override
-	public T getSync(String key) {
+	public V getSync(K key) {
 		try {
-			T res = decorated.getSync(key);
+			V res = decorated.getSync(key);
 			
 			if (res == null) {
 				return removeAndRegetSync(key);
@@ -74,7 +74,7 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 		
 	}
 
-	public T removeAndRegetSync(String key) {
+	public V removeAndRegetSync(K key) {
 		remove(key, new SimpleCallback() {
 			
 			@Override
@@ -92,26 +92,13 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 	}
 	
 	@Override
-	public void remove(String key, SimpleCallback callback) {
+	public void remove(K key, SimpleCallback callback) {
 		decorated.remove(key, callback);
 	}
 
-	@Override
-	public void close(SimpleCallback callback) {
-		decorated.close(callback);
-	}
+	
 
-	@Override
-	public void commit(SimpleCallback callback) {
-		decorated.commit(callback);
-	}
-
-	@Override
-	public void clearCache() {
-		decorated.clearCache();
-	}
-
-	public PurgeInvalidNodesMapConnection(MapConnection decorated) {
+	public PurgeInvalidNodesMapConnection(AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 	}

@@ -11,8 +11,8 @@ import de.mxro.async.callbacks.SimpleCallback;
  */
 public class PutOperation<T> {
 
+	private final String key;
 	private final T valueToBePut;
-
 	private final SimpleCallback callback;
 
 	public T getValueToBePut() {

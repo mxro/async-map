@@ -4,13 +4,13 @@ import java.util.Map;
 
 import de.mxro.async.map.internal.decorators.DelayPutConnection;
 import de.mxro.async.map.internal.decorators.MapCacheMapConnection;
-import de.mxro.async.map.internal.decorators.PurgeInvalidNodesMapConnection;
+import de.mxro.async.map.internal.decorators.PurgeInvalidValuesMap;
 import de.mxro.concurrency.Concurrency;
 
 public class AsyncMaps {
 
 	public final static MapConnection purgeInvalidValues(MapConnection mapConnection) {
-		return new PurgeInvalidNodesMapConnection(mapConnection);
+		return new PurgeInvalidValuesMap(mapConnection);
 	}
 
 	public static MapConnection delayPutConnection(int delay, Concurrency concurrency, MapConnection decorated) {

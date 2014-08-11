@@ -10,7 +10,7 @@ import de.mxro.async.map.AsyncMap;
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V> {
+public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 
@@ -111,7 +111,7 @@ public final class PurgeInvalidNodesMapConnection<K, V> implements AsyncMap<K, V
 		decorated.removeSync(key, value);
 	}
 
-	public PurgeInvalidNodesMapConnection(AsyncMap<K, V> decorated) {
+	public PurgeInvalidValuesMap(AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 	}

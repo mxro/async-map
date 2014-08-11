@@ -4,6 +4,12 @@ import de.mxro.async.callbacks.SimpleCallback;
 
 public interface PersistedMap {
 
+	/**
+	 * Assures that a connection to the persistence medium is established and
+	 * the map is operational.
+	 * 
+	 * @param callback
+	 */
 	public void init(SimpleCallback callback);
 
 	/**

@@ -7,17 +7,17 @@ import de.mxro.async.callbacks.ValueCallback;
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
- * @param <T>
+ * @param <V>
  */
-public class GetOperation<T> {
+public class GetOperation<V> {
 
-	private final ValueCallback<T> callback;
+	private final ValueCallback<V> callback;
 
-	public ValueCallback<T> getCallback() {
+	public ValueCallback<V> getCallback() {
 		return callback;
 	}
 
-	public GetOperation(ValueCallback<T> callback) {
+	public GetOperation(ValueCallback<V> callback) {
 		super();
 		this.callback = callback;
 	}

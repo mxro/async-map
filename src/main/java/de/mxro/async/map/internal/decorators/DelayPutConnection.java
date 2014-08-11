@@ -56,6 +56,9 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
 			final PutOperation<K,V> putOperation = new PutOperation<K, V>(key, value, callback);
 			
+			if (!pendingPuts.containsKey(key)) {
+				pendingPuts.put(key, new LinkedList<PutOperation<K,V>>());
+			}
 			
 			if (pendingPuts.containsKey(key)) {
 				

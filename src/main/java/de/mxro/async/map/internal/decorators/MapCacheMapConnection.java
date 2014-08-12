@@ -33,7 +33,6 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 		}
 
 		decorated.putSync(key, value);
-		;
 	}
 
 	@SuppressWarnings("unchecked")

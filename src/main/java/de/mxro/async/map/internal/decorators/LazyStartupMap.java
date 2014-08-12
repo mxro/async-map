@@ -193,8 +193,14 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 			
 			@Override
 			public void onFailure(Throwable t) {
+				final ArrayList<SimpleCallback> startingCopy;
 				synchronized (starting) {
-					
+					startingCopy = new ArrayList<SimpleCallback>(starting);
+					starting.clear();
+				}
+				
+				for (SimpleCallback callback: startingCopy) {
+					callback.onFailure(t);
 				}
 			}
 			
@@ -203,11 +209,15 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 				synchronized (started) {
 					started.set(true);
 				}
-				
+				final ArrayList<SimpleCallback> startingCopy;
 				synchronized (starting) {
-					ArrayList<SimpleCallback> startingCopy = new ArrayList<SimpleCallback>(starting);
+					startingCopy = new ArrayList<SimpleCallback>(starting);
+					starting.clear();
 				}
 				
+				for (SimpleCallback callback: startingCopy) {
+					callback.onSuccess();
+				}
 			}
 		});
 		

@@ -17,7 +17,6 @@ import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
 import de.mxro.service.callbacks.ShutdownCallback;
-import de.mxro.service.callbacks.StartCallback;
 
 public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
@@ -161,7 +160,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public void start(StartCallback callback) {
+	public void start(SimpleCallback callback) {
 		decorated.start(callback);
 	}
 

@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.flow.CallbackLatch;
+import de.mxro.async.internal.Value;
 import de.mxro.async.map.PersistedMap;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
@@ -20,7 +21,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	private final int delay;
 	private final Concurrency concurrency;
 	private final Map<K, List<PutOperation<K, V>>> pendingPuts;
-	private Boolean timerActive = false;
+	private Value<Boolean> timerActive = new Value<Boolean>(false);
 	private SimpleTimer timer = null;
 
 	private final static SimpleCallback EMPTY_CALLBACK = new SimpleCallback() {
@@ -58,11 +59,11 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 		}
 
 		synchronized (timerActive) {
-			if (timerActive == true) {
+			if (timerActive.get() == true) {
 				return;
 			}
 
-			timerActive = true;
+			timerActive.set( true);
 
 			timer = concurrency.newTimer().scheduleOnce(delay, new Runnable() {
 
@@ -70,7 +71,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 				public void run() {
 
 					synchronized (timerActive) {
-						timerActive = false;
+						timerActive.set( false);
 						timer = null;
 					}
 					processPuts(EMPTY_CALLBACK);
@@ -214,7 +215,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 			@Override
 			public void onSuccess() {
 				synchronized (timerActive) {
-					if (timerActive == true) {
+					if (timerActive.get() == true) {
 						timer.stop();
 					}
 				}

@@ -10,7 +10,7 @@ import de.mxro.async.map.MapConnection;
 public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
-	private final Map<K, V> cache;
+	private final Map<K, Object> cache;
 
 	private final static Object NULL = new Object() {
 
@@ -28,14 +28,14 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void get(String key, ValueCallback<T> callback) {
+	public void get(K key, ValueCallback<V> callback) {
 		Object fromCache = this.cache.get(key);
 		if (fromCache != null) {
 			if (fromCache == NULL) {
 				callback.onSuccess(null);
 				return ;
 			} else {
-				callback.onSuccess((T) fromCache);
+				callback.onSuccess((V) fromCache);
 				return;
 			}
 
@@ -47,13 +47,13 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public T getSync(String key) {
+	public V getSync(K key) {
 		Object fromCache = this.cache.get(key);
 		if (fromCache != null) {
 			if (fromCache == NULL) {
 				return null;
 			} else {
-				return (T) fromCache;
+				return (V) fromCache;
 			}
 
 		}
@@ -62,27 +62,12 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 	}
 
 	@Override
-	public void remove(String key, SimpleCallback callback) {
+	public void remove(K key, SimpleCallback callback) {
 		this.cache.remove(key);
 		this.decorated.remove(key, callback);
 	}
 
-	@Override
-	public void close(SimpleCallback callback) {
-		this.decorated.close(callback);
-	}
-
-	@Override
-	public void commit(SimpleCallback callback) {
-		this.decorated.commit(callback);
-	}
-
-	@Override
-	public void clearCache() {
-		this.decorated.clearCache();
-	}
-
-	public MapCacheMapConnection(Map<String, Object> cache, MapConnection<T> decorated ) {
+	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated ) {
 		super();
 		this.decorated = decorated;
 		this.cache = cache;

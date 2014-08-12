@@ -145,9 +145,8 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
 				@Override
 				public void onSuccess() {
-					// System.out.println("trigger callbacks "+put.getValue().callback.size());
-					for (SimpleCallback callback:put.getValue().callback) {
-						callback.onSuccess();
+					for (PutOperation<K,V> operation:put.getValue()) {
+						operation.getCallback().onSuccess();
 					}
 					latch.registerSuccess();
 				}
@@ -157,10 +156,10 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public void get(String key, ValueCallback<T> callback) {
+	public void get(K key, ValueCallback<V> callback) {
 		synchronized (pendingPuts) {
 			if (pendingPuts.containsKey(key)) {
-				callback.onSuccess(pendingPuts.get(key).obj);
+				callback.onSuccess(pendingPuts.get(key).get(pendingPuts.get(key).size()-1).getValue());
 				return;
 			}
 		}

@@ -4,12 +4,13 @@ import java.util.Map;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.AsyncMap2;
 import de.mxro.fn.Fn;
 
-public class MapCacheMapConnection<K, V> implements AsyncMap2<K, V> {
+public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 
-	private final AsyncMap2<K, V> decorated;
+	private final AsyncMap<K, V> decorated;
 	private final Map<K, Object> cache;
 
 	private final static Object NULL = Fn.object();
@@ -81,7 +82,7 @@ public class MapCacheMapConnection<K, V> implements AsyncMap2<K, V> {
 		this.decorated.removeSync(key);
 	}
 
-	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap2<K, V> decorated) {
+	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 		this.cache = cache;

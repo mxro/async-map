@@ -11,6 +11,7 @@ import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.flow.CallbackLatch;
 import de.mxro.async.internal.Value;
 import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
@@ -242,9 +243,11 @@ public class DelayPutConnection<K, V> implements AsyncMap<K, V> {
 
 	}
 
+	
+
 	@Override
-	public void clearCache() {
-		decorated.clearCache();
+	public void performOperation(MapOperation operation) {
+		decorated.performOperation(operation);
 	}
 
 	public DelayPutConnection(int delay, Concurrency con,

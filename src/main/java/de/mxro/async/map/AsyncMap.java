@@ -51,7 +51,6 @@ public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
 	 * <p>
 	 * For example, {@link ClearCacheOperation}, {@link GetOperation}
 	 */
-	public void performOperation(Object operation,
-			ValueCallback<Object> callback);
+	public void performOperation(Object operation);
 
 }

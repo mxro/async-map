@@ -1,5 +1,8 @@
 package de.mxro.async.map.internal.decorators;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.internal.Value;
@@ -22,6 +25,7 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 	private static final String ERROR_MESSAGE = "Lazy start map is not started up. Needs to be started using a call to start or a call to one of its asynchronous operations.";
 	final Value<Boolean> started;
 	final AsyncMap<K, V> decorated;
+	final List<SimpleCallback> starting;
 	/**
 	 * An unsynchronized variable, which allows faster access to the started
 	 * state.
@@ -177,7 +181,12 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 
 	@Override
 	public void start(SimpleCallback callback) {
-		
+		synchronized (starting) {
+			if (starting.size() > 0) {
+				starting.add(callback);
+				return;
+			}
+		}
 		decorated.start(new SimpleCallback() {
 			
 			@Override
@@ -264,6 +273,7 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 		this.started_fast_access = false;
 		this.started = new Value<Boolean>(false);
 		this.decorated = decorated;
+		this.starting = new LinkedList<SimpleCallback>();
 	}
 
 }

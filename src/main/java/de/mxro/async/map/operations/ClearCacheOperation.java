@@ -7,6 +7,6 @@ package de.mxro.async.map.operations;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class ClearCacheOperation {
+public class ClearCacheOperation implements MapOperation {
 
 }

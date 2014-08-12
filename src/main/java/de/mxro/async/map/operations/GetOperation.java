@@ -11,7 +11,7 @@ import de.mxro.async.map.PureAsyncMap;
  * @param <V>
  * @see PureAsyncMap
  */
-public class GetOperation<K, V> {
+public class GetOperation<K, V> implements MapOperation {
 
 	private final K key;
 	private final ValueCallback<V> callback;

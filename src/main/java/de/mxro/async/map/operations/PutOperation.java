@@ -11,7 +11,7 @@ import de.mxro.async.map.PureAsyncMap;
  * @param <V>
  * @see PureAsyncMap
  */
-public class PutOperation<K, V> {
+public class PutOperation<K, V> implements MapOperation {
 
 	private final K key;
 	private final V value;

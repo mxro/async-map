@@ -31,7 +31,7 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 	 * An unsynchronized variable, which allows faster access to the started
 	 * state.
 	 */
-	final boolean started_fast_access;
+	boolean started_fast_access;
 
 	@Override
 	public void put(final K key, final V value, final SimpleCallback callback) {
@@ -207,6 +207,7 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 			@Override
 			public void onSuccess() {
 				synchronized (started) {
+					started_fast_access = true;
 					started.set(true);
 				}
 				final ArrayList<SimpleCallback> startingCopy;

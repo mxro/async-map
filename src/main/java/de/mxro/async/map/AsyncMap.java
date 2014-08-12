@@ -1,10 +1,17 @@
 package de.mxro.async.map;
 
 import de.mxro.async.callbacks.SimpleCallback;
+import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.service.Service;
 
 public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
 
+	public void put(K key, V value, SimpleCallback callback);
+
+	public void get(K key, ValueCallback<V> callback);
+
+	public void remove(K key, SimpleCallback callback);
+	
 	/**
 	 * Assures that a connection to the persistence medium is established and
 	 * the map is operational.

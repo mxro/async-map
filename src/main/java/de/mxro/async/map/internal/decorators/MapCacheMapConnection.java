@@ -4,19 +4,20 @@ import java.util.Map;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.MapConnection;
 
-public class MapCacheMapConnection<T> implements MapConnection<T> {
+public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 
-	private final MapConnection<T> decorated;
-	private final Map<String, Object> cache;
+	private final AsyncMap<K, V> decorated;
+	private final Map<K, V> cache;
 
 	private final static Object NULL = new Object() {
 
 	};
 
 	@Override
-	public void put(String key, T value, SimpleCallback callback) {
+	public void put(K key, V value, SimpleCallback callback) {
 		if (value != null) {
 			this.cache.put(key, value);
 		} else {

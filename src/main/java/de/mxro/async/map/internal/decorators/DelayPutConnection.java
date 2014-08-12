@@ -167,10 +167,10 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public T getSync(String key) {
+	public V getSync(K key) {
 		synchronized (pendingPuts) {
 			if (pendingPuts.containsKey(key)) {
-				return pendingPuts.get(key).obj;
+				return pendingPuts.get(key).get(pendingPuts.get(key).size()-1).getValue();
 			}
 		}
 
@@ -178,7 +178,10 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public void remove(String key, SimpleCallback callback) {
+	public void remove(K key, SimpleCallback callback) {
+		synchronized (pendingPuts) {
+			pendingPuts.remove(key);
+		}
 		decorated.remove(key, callback);
 	}
 

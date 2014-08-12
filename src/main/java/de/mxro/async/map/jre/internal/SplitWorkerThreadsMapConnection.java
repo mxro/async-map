@@ -8,19 +8,19 @@ import java.util.concurrent.TimeUnit;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.MapConnection;
+import de.mxro.async.map.PersistedMap;
+import de.mxro.fn.Fn;
 
-public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
+public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V> {
 
-	private final MapConnection<T> decorated;
+	private final PersistedMap<K,V> decorated;
 	private final ExecutorService executor;
-	private final ConcurrentHashMap<String, Object> pendingPuts;
+	private final ConcurrentHashMap<K, Object> pendingPuts;
 
-	private final static Object NULL = new Object() {
-
-	};
+	private final static Object NULL = Fn.object();
 
 	@SuppressWarnings("unchecked")
-	private final void writeValue(final String key, final SimpleCallback callback) {
+	private final void writeValue(final K key, final SimpleCallback callback) {
 		synchronized (pendingPuts) {
 			Object value = pendingPuts.get(key);
 			if (value == null) {
@@ -36,7 +36,7 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 			}
 			
 			if (value != NULL) {
-				decorated.put(key, (T) value, callback);
+				decorated.put(key, (V) value, callback);
 			} else {
 				decorated.remove(key, new SimpleCallback() {
 
@@ -57,7 +57,7 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 	}
 
 	@Override
-	public void put(final String key, final Object value,
+	public void put(final K key, final V value,
 			final SimpleCallback callback) {
 		
 		// System.out.println("put "+key);
@@ -78,12 +78,12 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void get(String key, ValueCallback<T> callback) {
+	public void get(K key, ValueCallback<V> callback) {
 		Object value = pendingPuts.get(key);
 
 		if (value != null) {
 			if (value != NULL) {
-				callback.onSuccess((T) value);
+				callback.onSuccess((V) value);
 				return;
 			} else {
 				callback.onSuccess(null);
@@ -97,13 +97,13 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public T getSync(String key) {
+	public V getSync(K key) {
 		
 		Object value = pendingPuts.get(key);
 
 		if (value != null) {
 			if (value != NULL) {
-				return (T) value;
+				return (V) value;
 			} else {
 				return null;
 			}
@@ -113,7 +113,7 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 	}
 
 	@Override
-	public void remove(final String key, final SimpleCallback callback) {
+	public void remove(final K key, final SimpleCallback callback) {
 		pendingPuts.put(key, NULL);
 		executor.execute(new Runnable() {
 
@@ -136,7 +136,7 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 	}
 
 	@Override
-	public void close(final SimpleCallback callback) {
+	public void stop(final SimpleCallback callback) {
 
 		commit(new SimpleCallback() {
 
@@ -147,7 +147,7 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 
 			@Override
 			public void onSuccess() {
-				decorated.close(new SimpleCallback() {
+				decorated.stop(new SimpleCallback() {
 
 					@Override
 					public void onFailure(Throwable t) {
@@ -210,12 +210,12 @@ public class SplitWorkerThreadsMapConnection<T> implements MapConnection<T> {
 		decorated.clearCache();
 	}
 
-	public SplitWorkerThreadsMapConnection(MapConnection<T> connection,
+	public SplitWorkerThreadsMapConnection(PersistedMap<K,V> connection,
 			int workerThreads) {
 		super();
 		this.decorated = connection;
 		this.executor = Executors.newFixedThreadPool(4);
-		this.pendingPuts = new ConcurrentHashMap<String, Object>();
+		this.pendingPuts = new ConcurrentHashMap<K, Object>();
 	}
 
 }

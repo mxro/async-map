@@ -9,15 +9,18 @@ import de.mxro.concurrency.Concurrency;
 
 public class AsyncMaps {
 
-	public final static MapConnection purgeInvalidValues(MapConnection mapConnection) {
-		return new PurgeInvalidValuesMap(mapConnection);
+	public final static <K, V> AsyncMap<K, V> purgeInvalidValues(
+			AsyncMap<K, V> forMap) {
+		return new PurgeInvalidValuesMap<K, V>(forMap);
 	}
 
-	public static MapConnection delayPutConnection(int delay, Concurrency concurrency, MapConnection decorated) {
-		return new DelayPutConnection(delay, concurrency, decorated);
+	public static <K, V> PersistedMap<K, V> delayPutConnection(int delay,
+			Concurrency concurrency, PersistedMap<K, V> decorated) {
+		return new DelayPutConnection<K, V>(delay, concurrency, decorated);
 	}
 
-	public static MapConnection cacheInMapConnection(Map<String, Object> cache, MapConnection decorated) {
+	public static MapConnection cacheInMapConnection(Map<String, Object> cache,
+			MapConnection decorated) {
 		return new MapCacheMapConnection(cache, decorated);
 	}
 

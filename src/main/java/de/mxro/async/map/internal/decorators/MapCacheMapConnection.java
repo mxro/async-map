@@ -26,6 +26,17 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 		decorated.put(key, value, callback);
 	}
 
+	@Override
+	public void putSync(K key, V value) {
+		if (value != null) {
+			this.cache.put(key, value);
+		} else {
+			this.cache.put(key, NULL);
+		}
+		
+		decorated.putSync(key, value);;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void get(K key, ValueCallback<V> callback) {
@@ -65,6 +76,12 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 	public void remove(K key, SimpleCallback callback) {
 		this.cache.remove(key);
 		this.decorated.remove(key, callback);
+	}
+	
+	@Override
+	public void removeSync(K key, V value) {
+		this.cache.remove(key);
+		this.decorated.removeSync(key, value);
 	}
 
 	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated ) {

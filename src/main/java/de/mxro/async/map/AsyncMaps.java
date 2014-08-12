@@ -25,7 +25,12 @@ public class AsyncMaps {
 		return new MapCacheMapConnection<K, V>(cache, decorated);
 	}
 
-	
+	/**
+	 * 
+	 * @param decorated
+	 * @return
+	 * @see LazyStartupMap
+	 */
 	public static <K,V> AsyncMap<K,V> lazyStartup(AsyncMap<K,V> decorated) {
 		return new LazyStartupMap<K, V>(decorated);
 	}

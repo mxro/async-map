@@ -2,7 +2,6 @@ package de.mxro.async.map;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.service.Service;
-import de.mxro.service.callbacks.ShutdownCallback;
 
 public interface PersistedMap<K, V> extends Service, AsyncMap<K, V> {
 
@@ -22,7 +21,7 @@ public interface PersistedMap<K, V> extends Service, AsyncMap<K, V> {
 	 * 
 	 * @param callback
 	 */
-	public void stop(ShutdownCallback callback);
+	public void stop(SimpleCallback callback);
 
 	/**
 	 * Assures pending changes are written to persistence medium.

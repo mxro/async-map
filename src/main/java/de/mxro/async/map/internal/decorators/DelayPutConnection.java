@@ -16,7 +16,6 @@ import de.mxro.async.map.PersistedMap;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
-import de.mxro.service.callbacks.ShutdownCallback;
 
 public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
@@ -154,7 +153,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	
 	
 	@Override
-	public void stop(ShutdownCallback callback) {
+	public void stop(SimpleCallback callback) {
 		// TODO Auto-generated method stub
 		
 	}

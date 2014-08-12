@@ -1,7 +1,5 @@
 package de.mxro.async.map.internal.decorators;
 
-import javax.management.PersistentMBean;
-
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;

@@ -2,7 +2,8 @@ package de.mxro.async.map.internal.decorators;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.map.AsyncMap2;
+import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.operations.MapOperation;
 
 /**
  * <p>Use in case seralizations can get outdated in a cache.
@@ -10,9 +11,9 @@ import de.mxro.async.map.AsyncMap2;
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-public final class PurgeInvalidValuesMap<K, V> implements AsyncMap2<K, V> {
+public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 
-	private final AsyncMap2<K, V> decorated;
+	private final AsyncMap<K, V> decorated;
 
 	@Override
 	public void put(K key, V value, SimpleCallback callback) {
@@ -111,7 +112,30 @@ public final class PurgeInvalidValuesMap<K, V> implements AsyncMap2<K, V> {
 		decorated.removeSync(key);
 	}
 
-	public PurgeInvalidValuesMap(AsyncMap2<K, V> decorated) {
+	
+	
+	
+	@Override
+	public void start(SimpleCallback callback) {
+		decorated.start(callback);
+	}
+
+	@Override
+	public void stop(SimpleCallback callback) {
+		decorated.stop(callback);
+	}
+
+	@Override
+	public void commit(SimpleCallback callback) {
+		decorated.commit(callback);
+	}
+
+	@Override
+	public void performOperation(MapOperation operation) {
+		decorated.performOperation(operation);
+	}
+
+	public PurgeInvalidValuesMap(AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 	}

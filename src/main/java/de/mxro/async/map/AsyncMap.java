@@ -2,6 +2,8 @@ package de.mxro.async.map;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.map.operations.ClearCacheOperation;
+import de.mxro.async.map.operations.GetOperation;
 import de.mxro.service.Service;
 
 public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
@@ -11,13 +13,13 @@ public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
 	public void get(K key, ValueCallback<V> callback);
 
 	public void remove(K key, SimpleCallback callback);
-	
+
 	public V getSync(K key);
 
 	public void putSync(K key, V value);
 
 	public void removeSync(K key);
-	
+
 	/**
 	 * Assures that a connection to the persistence medium is established and
 	 * the map is operational.
@@ -44,9 +46,12 @@ public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
 	public void commit(SimpleCallback callback);
 
 	/**
-	 * If the persistence implementation supports a local cache, calling this
-	 * method clears this cache.
+	 * <p>
+	 * Perform a generic operation on this map.
+	 * <p>
+	 * For example, {@link ClearCacheOperation}, {@link GetOperation}
 	 */
-	public void clearCache();
+	public void performOperation(Object operation,
+			ValueCallback<Object> callback);
 
 }

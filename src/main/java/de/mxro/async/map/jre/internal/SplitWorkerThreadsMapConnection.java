@@ -10,6 +10,7 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 import de.mxro.fn.Success;
 
@@ -263,9 +264,11 @@ public class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
 
 	}
 
+	
+
 	@Override
-	public void clearCache() {
-		decorated.clearCache();
+	public void performOperation(MapOperation operation) {
+		decorated.performOperation(operation);
 	}
 
 	public SplitWorkerThreadsMapConnection(AsyncMap<K,V> connection,

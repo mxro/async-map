@@ -63,8 +63,7 @@ public class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 
 	@Override
 	public void commit(SimpleCallback callback) {
-		// TODO Auto-generated method stub
-
+		decorated.commit(callback);
 	}
 
 	@Override

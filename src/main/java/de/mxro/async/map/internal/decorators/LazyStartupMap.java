@@ -1,5 +1,6 @@
 package de.mxro.async.map.internal.decorators;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -201,6 +202,10 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 			public void onSuccess() {
 				synchronized (started) {
 					started.set(true);
+				}
+				
+				synchronized (starting) {
+					ArrayList<SimpleCallback> startingCopy = new ArrayList<SimpleCallback>(starting);
 				}
 				
 			}

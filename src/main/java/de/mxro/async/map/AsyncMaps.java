@@ -19,9 +19,9 @@ public class AsyncMaps {
 		return new DelayPutConnection<K, V>(delay, concurrency, decorated);
 	}
 
-	public static MapConnection cacheInMapConnection(Map<String, Object> cache,
-			MapConnection decorated) {
-		return new MapCacheMapConnection(cache, decorated);
+	public static <K, V> AsyncMap<K,V> cacheInMapConnection(Map<K, Object> cache,
+			AsyncMap<K, V> decorated) {
+		return new MapCacheMapConnection<K, V>(cache, decorated);
 	}
 
 }

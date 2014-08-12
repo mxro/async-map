@@ -1,12 +1,15 @@
 package de.mxro.async.map.jre.internal;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
+import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.PersistedMap;
 import de.mxro.fn.Fn;
 
@@ -75,6 +78,35 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 		});
 	}
 
+	@Override
+	public void putSync(final K key, final V value) {
+		AsyncJre.waitFor(new Deferred<Void>() {
+
+			@Override
+			public void get(ValueCallback<Void> callback) {
+				put(key, value, new SimpleCallback() {
+					
+					@Override
+					public void onFailure(Throwable t) {
+						callback.onFailure(t);
+					}
+					
+					@Override
+					public void onSuccess() {
+						
+					}
+				});
+			}
+		});
+		
+	}
+
+	@Override
+	public void removeSync(K key, V value) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void get(K key, ValueCallback<V> callback) {
@@ -182,17 +214,7 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 
 	
 	
-	@Override
-	public void putSync(K key, V value) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void removeSync(K key, V value) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void start(final SimpleCallback callback) {

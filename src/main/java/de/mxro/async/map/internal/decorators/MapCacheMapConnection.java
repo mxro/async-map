@@ -5,7 +5,6 @@ import java.util.Map;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
-import de.mxro.async.map.MapConnection;
 
 public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 

@@ -7,15 +7,14 @@ import java.util.concurrent.TimeUnit;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.map.MapConnection;
 import de.mxro.async.map.PersistedMap;
 import de.mxro.fn.Fn;
 
 public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V> {
 
 	private final PersistedMap<K,V> decorated;
-	private final ExecutorService executor;
-	private final ConcurrentHashMap<K, Object> pendingPuts;
+	private ExecutorService executor;
+	private ConcurrentHashMap<K, Object> pendingPuts;
 
 	private final static Object NULL = Fn.object();
 
@@ -181,6 +180,27 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 
 	}
 
+	
+	
+	@Override
+	public void putSync(K key, V value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSync(K key, V value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start(final SimpleCallback callback) {
+		this.executor = Executors.newFixedThreadPool(4);
+		this.pendingPuts = new ConcurrentHashMap<K, Object>();
+		callback.onSuccess();
+	}
+
 	@Override
 	public void commit(final SimpleCallback callback) {
 
@@ -214,8 +234,7 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 			int workerThreads) {
 		super();
 		this.decorated = connection;
-		this.executor = Executors.newFixedThreadPool(4);
-		this.pendingPuts = new ConcurrentHashMap<K, Object>();
+		
 	}
 
 }

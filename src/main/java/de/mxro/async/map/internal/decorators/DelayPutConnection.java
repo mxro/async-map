@@ -16,6 +16,8 @@ import de.mxro.async.map.PersistedMap;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
+import de.mxro.service.callbacks.ShutdownCallback;
+import de.mxro.service.callbacks.StartCallback;
 
 public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
@@ -83,33 +85,6 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 
 		}
 	}
-
-	private static final class MyEntry<K, V> implements Map.Entry<K, V> {
-	    private final K key;
-	    private V value;
-
-	    public MyEntry(K key, V value) {
-	        this.key = key;
-	        this.value = value;
-	    }
-
-	    @Override
-	    public K getKey() {
-	        return key;
-	    }
-
-	    @Override
-	    public V getValue() {
-	        return value;
-	    }
-
-	    @Override
-	    public V setValue(V value) {
-	        V old = this.value;
-	        this.value = value;
-	        return old;
-	    }
-	}
 	
 	private final void processPuts(final SimpleCallback callback) {
 		final Map<K, List<PutOperation<K, V>>> puts;
@@ -175,6 +150,37 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 		}
 
 		return decorated.getSync(key);
+	}
+
+	
+	
+	@Override
+	public void stop(ShutdownCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start(StartCallback callback) {
+		decorated.start(callback);
+	}
+
+	@Override
+	public void putSync(K key, V value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeSync(K key, V value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start(SimpleCallback callback) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

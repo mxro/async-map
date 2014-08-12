@@ -131,13 +131,13 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 				callback.onSuccess();
 			}
 		};
-		for (final Entry<V, PutOperation<K,V>> put : puts) {
+		for (final Entry<K, List<PutOperation<K,V>>> put : puts) {
 
-			decorated.put(put.getKey(), put.getValue().obj, new SimpleCallback() {
+			decorated.put(put.getKey(), put.getValue().get(put.getValue().size()-1).getValue(), new SimpleCallback() {
 
 				@Override
 				public void onFailure(Throwable arg0) {
-					for (SimpleCallback callback:put.getValue().callback) {
+					for (PutOperation<K,V> callback:put.getValue().callback) {
 						callback.onFailure(arg0);
 					}
 					latch.registerSuccess();

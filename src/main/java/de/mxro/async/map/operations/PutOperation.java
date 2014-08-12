@@ -1,7 +1,6 @@
 package de.mxro.async.map.operations;
 
 import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.map.PureAsyncMap;
 
 /**
  * An object representation of a put operation on an asynchronous map.

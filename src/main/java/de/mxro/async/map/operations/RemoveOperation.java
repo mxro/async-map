@@ -1,10 +1,10 @@
 package de.mxro.async.map.operations;
 
 import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.map.PureAsyncMap;
+import de.mxro.async.map.AsyncMap;
 
 /**
- * An object representation of a remove operation on an {@link PureAsyncMap}.
+ * An object representation of a remove operation on an {@link AsyncMap}.
  * 
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *

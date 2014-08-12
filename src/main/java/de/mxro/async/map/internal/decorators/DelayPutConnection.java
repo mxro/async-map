@@ -209,7 +209,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public void close(final SimpleCallback callback) {
+	public void stop(final SimpleCallback callback) {
 		processAllPuts(new SimpleCallback() {
 
 			@Override
@@ -224,7 +224,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 						timer.stop();
 					}
 				}
-				decorated.close(callback);
+				decorated.stop(callback);
 			}
 		});
 
@@ -253,12 +253,12 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	public DelayPutConnection(int delay, Concurrency con,
-			MapConnection<T> decorated) {
+			PersistedMap<K,V> decorated) {
 		super();
 		this.decorated = decorated;
 		this.delay = delay;
 		this.concurrency = con;
-		this.pendingPuts = new HashMap<String, PendingPut<T>>();
+		this.pendingPuts = new HashMap<K, List<PutOperation<K,V>>>();
 	}
 
 }

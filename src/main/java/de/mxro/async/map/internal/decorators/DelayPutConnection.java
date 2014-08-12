@@ -112,14 +112,15 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 	
 	private final void processPuts(final SimpleCallback callback) {
-		final ArrayList<Entry<String, PendingPut<T>>> puts;
+		final Map<V, PutOperation<K, V>> puts = new HashMap<V, PutOperation<K, V>>();
 		synchronized (pendingPuts) {
-			Set<Entry<String, PendingPut<T>>> entries = pendingPuts.entrySet();
-			puts = new ArrayList<Entry<String, PendingPut<T>>>(
-					entries.size());
-			for (Entry<String, PendingPut<T>> e: entries) {
-				puts.add(new MyEntry<String, PendingPut<T>>(e.getKey(), e.getValue()));
+			
+			for (Entry<K, List<PutOperation<K, V>>> entry : pendingPuts.entrySet()) {
+				V value = entry.getValue().get(entry.getValue().size()-1).getValue();
+				
+				puts.put(value, entry.getValue());
 			}
+
 			
 			pendingPuts.clear();
 		}

@@ -187,17 +187,21 @@ public class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 				return;
 			}
 		}
+		starting.add(callback);
 		decorated.start(new SimpleCallback() {
 			
 			@Override
 			public void onFailure(Throwable t) {
-				// TODO Auto-generated method stub
-				
+				synchronized (starting) {
+					
+				}
 			}
 			
 			@Override
 			public void onSuccess() {
-				// TODO Auto-generated method stub
+				synchronized (started) {
+					started.set(true);
+				}
 				
 			}
 		});

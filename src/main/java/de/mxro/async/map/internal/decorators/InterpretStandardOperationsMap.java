@@ -22,50 +22,43 @@ public class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 
 	@Override
 	public void put(K key, V value, SimpleCallback callback) {
-		// TODO Auto-generated method stub
-
+		decorated.put(key, value, callback);
 	}
 
 	@Override
 	public void get(K key, ValueCallback<V> callback) {
-		// TODO Auto-generated method stub
-
+		decorated.get(key, callback);
 	}
 
 	@Override
 	public void remove(K key, SimpleCallback callback) {
-		// TODO Auto-generated method stub
-
+		decorated.remove(key, callback);
 	}
 
 	@Override
 	public V getSync(K key) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return decorated.getSync(key);
 	}
 
 	@Override
 	public void putSync(K key, V value) {
-		// TODO Auto-generated method stub
-
+		decorated.putSync(key, value);
 	}
 
 	@Override
 	public void removeSync(K key) {
-		// TODO Auto-generated method stub
-
+		decorated.removeSync(key);
 	}
 
 	@Override
 	public void start(SimpleCallback callback) {
-		// TODO Auto-generated method stub
-
+		decorated.start(callback);
 	}
 
 	@Override
 	public void stop(SimpleCallback callback) {
-		// TODO Auto-generated method stub
-
+		decorated.stop(callback);
 	}
 
 	@Override

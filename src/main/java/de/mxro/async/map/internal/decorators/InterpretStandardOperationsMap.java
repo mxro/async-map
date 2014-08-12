@@ -10,6 +10,14 @@ import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.async.map.operations.RemoveOperation;
 
+/**
+ * <p>Forwards standard operations (put, get, remove) to the methods on this map.
+ * 
+ * @author <a href="http://www.mxro.de">Max Rohde</a>
+ *
+ * @param <K>
+ * @param <V>
+ */
 public class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
@@ -91,9 +99,11 @@ public class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 			@SuppressWarnings("unchecked")
 			RemoveOperation<K> removeOperation = (RemoveOperation<K>) operation;
 			
-			this.remove(removeOperation.getKey(), removeOperation.get);
+			this.remove(removeOperation.getKey(), removeOperation.getCallback());
 			
 		}
+		
+		this.decorated.performOperation(operation);
 	}
 
 	public InterpretStandardOperationsMap(AsyncMap<K, V> decorated) {

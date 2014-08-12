@@ -26,10 +26,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	private Boolean timerActive = false;
 	private SimpleTimer timer = null;
 
-	private final static class PendingPut<T> {
-		public T obj;
-		public List<SimpleCallback> callback = new LinkedList<SimpleCallback>();
-	}
+	
 
 	private final static SimpleCallback EMPTY_CALLBACK = new SimpleCallback() {
 

@@ -8,7 +8,7 @@ import de.mxro.async.map.PureAsyncMap;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-public class RemoveOperation<K> {
+public class RemoveOperation<K> implements MapOperation {
 
 	private final K key;
 

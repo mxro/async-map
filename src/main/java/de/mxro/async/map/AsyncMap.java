@@ -4,6 +4,7 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.operations.ClearCacheOperation;
 import de.mxro.async.map.operations.GetOperation;
+import de.mxro.async.map.operations.MapOperation;
 import de.mxro.service.Service;
 
 public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
@@ -51,6 +52,6 @@ public interface AsyncMap<K, V> extends Service, AsyncMap2<K, V> {
 	 * <p>
 	 * For example, {@link ClearCacheOperation}, {@link GetOperation}
 	 */
-	public void performOperation(Object operation);
+	public void performOperation(MapOperation operation);
 
 }

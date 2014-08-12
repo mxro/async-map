@@ -2,7 +2,7 @@ package de.mxro.async.map.internal.decorators;
 
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.AsyncMap2;
 
 /**
  * <p>Use in case seralizations can get outdated in a cache.
@@ -10,9 +10,9 @@ import de.mxro.async.map.AsyncMap;
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
+public final class PurgeInvalidValuesMap<K, V> implements AsyncMap2<K, V> {
 
-	private final AsyncMap<K, V> decorated;
+	private final AsyncMap2<K, V> decorated;
 
 	@Override
 	public void put(K key, V value, SimpleCallback callback) {
@@ -111,7 +111,7 @@ public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 		decorated.removeSync(key);
 	}
 
-	public PurgeInvalidValuesMap(AsyncMap<K, V> decorated) {
+	public PurgeInvalidValuesMap(AsyncMap2<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 	}

@@ -9,8 +9,8 @@ import de.mxro.concurrency.Concurrency;
 
 public class AsyncMaps {
 
-	public final static <K, V> AsyncMap<K, V> purgeInvalidValues(
-			AsyncMap<K, V> forMap) {
+	public final static <K, V> AsyncMap2<K, V> purgeInvalidValues(
+			AsyncMap2<K, V> forMap) {
 		return new PurgeInvalidValuesMap<K, V>(forMap);
 	}
 
@@ -19,8 +19,8 @@ public class AsyncMaps {
 		return new DelayPutConnection<K, V>(delay, concurrency, decorated);
 	}
 
-	public static <K, V> AsyncMap<K,V> cacheInMapConnection(Map<K, Object> cache,
-			AsyncMap<K, V> decorated) {
+	public static <K, V> AsyncMap2<K,V> cacheInMapConnection(Map<K, Object> cache,
+			AsyncMap2<K, V> decorated) {
 		return new MapCacheMapConnection<K, V>(cache, decorated);
 	}
 

@@ -3,7 +3,7 @@ package de.mxro.async.map;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.service.Service;
 
-public interface PersistedMap<K, V> extends Service, AsyncMap<K, V> {
+public interface PersistedMap<K, V> extends Service, AsyncMap2<K, V> {
 
 	/**
 	 * Assures that a connection to the persistence medium is established and

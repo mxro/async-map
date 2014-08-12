@@ -6,6 +6,7 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.AsyncMap2;
+import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 
 public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
@@ -80,6 +81,27 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 	public void removeSync(K key) {
 		this.cache.remove(key);
 		this.decorated.removeSync(key);
+	}
+
+	
+	@Override
+	public void start(SimpleCallback callback) {
+		this.decorated.start(callback);
+	}
+
+	@Override
+	public void stop(SimpleCallback callback) {
+		this.decorated.stop(callback);
+	}
+
+	@Override
+	public void commit(SimpleCallback callback) {
+		this.decorated.commit(callback);
+	}
+
+	@Override
+	public void performOperation(MapOperation operation) {
+		this.decorated.performOperation(operation);
 	}
 
 	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated) {

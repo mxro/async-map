@@ -9,13 +9,13 @@ import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
-import de.mxro.async.map.PersistedMap;
+import de.mxro.async.map.AsyncMap;
 import de.mxro.fn.Fn;
 import de.mxro.fn.Success;
 
-public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V> {
+public class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
 
-	private final PersistedMap<K,V> decorated;
+	private final AsyncMap<K,V> decorated;
 	private ExecutorService executor;
 	private ConcurrentHashMap<K, Object> pendingPuts;
 
@@ -268,7 +268,7 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 		decorated.clearCache();
 	}
 
-	public SplitWorkerThreadsMapConnection(PersistedMap<K,V> connection,
+	public SplitWorkerThreadsMapConnection(AsyncMap<K,V> connection,
 			int workerThreads) {
 		super();
 		this.decorated = connection;

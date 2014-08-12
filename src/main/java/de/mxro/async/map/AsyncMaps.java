@@ -14,8 +14,8 @@ public class AsyncMaps {
 		return new PurgeInvalidValuesMap<K, V>(forMap);
 	}
 
-	public static <K, V> PersistedMap<K, V> delayPutConnection(int delay,
-			Concurrency concurrency, PersistedMap<K, V> decorated) {
+	public static <K, V> AsyncMap<K, V> delayPutConnection(int delay,
+			Concurrency concurrency, AsyncMap<K, V> decorated) {
 		return new DelayPutConnection<K, V>(delay, concurrency, decorated);
 	}
 

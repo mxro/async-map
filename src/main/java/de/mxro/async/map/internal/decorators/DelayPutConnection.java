@@ -10,14 +10,14 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.flow.CallbackLatch;
 import de.mxro.async.internal.Value;
-import de.mxro.async.map.PersistedMap;
+import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
 
-public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
+public class DelayPutConnection<K, V> implements AsyncMap<K, V> {
 
-	private final PersistedMap<K, V> decorated;
+	private final AsyncMap<K, V> decorated;
 	private final int delay;
 	private final Concurrency concurrency;
 	private final Map<K, List<PutOperation<K, V>>> pendingPuts;
@@ -248,7 +248,7 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	public DelayPutConnection(int delay, Concurrency con,
-			PersistedMap<K, V> decorated) {
+			AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 		this.delay = delay;

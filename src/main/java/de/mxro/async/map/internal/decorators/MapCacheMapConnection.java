@@ -77,9 +77,9 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 	}
 
 	@Override
-	public void removeSync(K key, V value) {
+	public void removeSync(K key) {
 		this.cache.remove(key);
-		this.decorated.removeSync(key, value);
+		this.decorated.removeSync(key);
 	}
 
 	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated) {

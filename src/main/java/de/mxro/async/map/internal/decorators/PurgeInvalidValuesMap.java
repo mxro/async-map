@@ -107,8 +107,8 @@ public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 	}
 
 	@Override
-	public void removeSync(K key, V value) {
-		decorated.removeSync(key, value);
+	public void removeSync(K key) {
+		decorated.removeSync(key);
 	}
 
 	public PurgeInvalidValuesMap(AsyncMap<K, V> decorated) {

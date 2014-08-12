@@ -1,7 +1,6 @@
 package de.mxro.async.map.jre.internal;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -12,6 +11,7 @@ import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.PersistedMap;
 import de.mxro.fn.Fn;
+import de.mxro.fn.Success;
 
 public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V> {
 
@@ -23,7 +23,7 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 
 	@SuppressWarnings("unchecked")
 	private final void writeValue(final K key, final SimpleCallback callback) {
-		synchronized (pendingPuts) {
+		synchronized (this) {
 			Object value = pendingPuts.get(key);
 			if (value == null) {
 				callback.onSuccess();
@@ -80,10 +80,10 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 
 	@Override
 	public void putSync(final K key, final V value) {
-		AsyncJre.waitFor(new Deferred<Void>() {
+		AsyncJre.waitFor(new Deferred<Success>() {
 
 			@Override
-			public void get(ValueCallback<Void> callback) {
+			public void get(final ValueCallback<Success> callback) {
 				put(key, value, new SimpleCallback() {
 					
 					@Override
@@ -93,7 +93,7 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 					
 					@Override
 					public void onSuccess() {
-						
+						callback.onSuccess(Success.INSTANCE);
 					}
 				});
 			}
@@ -102,9 +102,25 @@ public class SplitWorkerThreadsMapConnection<K, V> implements PersistedMap<K, V>
 	}
 
 	@Override
-	public void removeSync(K key, V value) {
-		// TODO Auto-generated method stub
-		
+	public void removeSync(final K key) {
+		AsyncJre.waitFor(new Deferred<Success>() {
+
+			@Override
+			public void get(final ValueCallback<Success> callback) {
+				remove(key, new SimpleCallback() {
+					
+					@Override
+					public void onFailure(Throwable t) {
+						callback.onFailure(t);
+					}
+					
+					@Override
+					public void onSuccess() {
+						callback.onSuccess(Success.INSTANCE);
+					}
+				});
+			}
+		});
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -14,6 +14,6 @@ public interface PureSyncMap<K, V> {
 
 	public void putSync(K key, V value);
 
-	public void removeSync(K key, V value);
+	public void removeSync(K key);
 
 }

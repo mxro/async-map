@@ -162,13 +162,13 @@ public class DelayPutConnection<K, V> implements PersistedMap<K, V> {
 	}
 
 	@Override
-	public void removeSync(K key, V value) {
+	public void removeSync(K key) {
 
 		synchronized (pendingPuts) {
 			pendingPuts.remove(key);
 		}
 
-		decorated.removeSync(key, value);
+		decorated.removeSync(key);
 	}
 
 	@Override

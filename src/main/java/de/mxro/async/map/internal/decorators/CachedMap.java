@@ -8,7 +8,7 @@ import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 
-public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
+public class CachedMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 	private final Map<K, Object> cache;
@@ -103,7 +103,7 @@ public class MapCacheMapConnection<K, V> implements AsyncMap<K, V> {
 		this.decorated.performOperation(operation);
 	}
 
-	public MapCacheMapConnection(Map<K, Object> cache, AsyncMap<K, V> decorated) {
+	public CachedMap(Map<K, Object> cache, AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;
 		this.cache = cache;

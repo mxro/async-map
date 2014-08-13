@@ -2,10 +2,10 @@ package de.mxro.async.map;
 
 import java.util.Map;
 
-import de.mxro.async.map.internal.decorators.DelayPutConnection;
+import de.mxro.async.map.internal.decorators.DelayPutMap;
 import de.mxro.async.map.internal.decorators.KeyFilterMap;
 import de.mxro.async.map.internal.decorators.LazyStartupMap;
-import de.mxro.async.map.internal.decorators.MapCacheMapConnection;
+import de.mxro.async.map.internal.decorators.CachedMap;
 import de.mxro.async.map.internal.decorators.PurgeInvalidValuesMap;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.fn.Function;
@@ -19,12 +19,12 @@ public class AsyncMaps {
 
 	public static <K, V> AsyncMap<K, V> delayPutConnection(int delay,
 			Concurrency concurrency, AsyncMap<K, V> decorated) {
-		return new DelayPutConnection<K, V>(delay, concurrency, decorated);
+		return new DelayPutMap<K, V>(delay, concurrency, decorated);
 	}
 
 	public static <K, V> AsyncMap<K, V> cacheInMapConnection(
 			Map<K, Object> cache, AsyncMap<K, V> decorated) {
-		return new MapCacheMapConnection<K, V>(cache, decorated);
+		return new CachedMap<K, V>(cache, decorated);
 	}
 
 	public final static <K, V> AsyncMap<K, V> filterKeys(Function<K, K> filter,

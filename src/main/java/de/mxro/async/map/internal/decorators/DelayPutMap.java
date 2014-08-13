@@ -16,7 +16,7 @@ import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
 
-public class DelayPutConnection<K, V> implements AsyncMap<K, V> {
+public class DelayPutMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 	private final int delay;
@@ -250,7 +250,7 @@ public class DelayPutConnection<K, V> implements AsyncMap<K, V> {
 		decorated.performOperation(operation);
 	}
 
-	public DelayPutConnection(int delay, Concurrency con,
+	public DelayPutMap(int delay, Concurrency con,
 			AsyncMap<K, V> decorated) {
 		super();
 		this.decorated = decorated;

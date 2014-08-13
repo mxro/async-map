@@ -7,6 +7,14 @@ import de.mxro.async.map.operations.GetOperation;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.service.Service;
 
+/**
+ * <p>An interface for an asynchronous, persisted map.
+ * 
+ * @author <a href="http://www.mxro.de">Max Rohde</a>
+ *
+ * @param <K>
+ * @param <V>
+ */
 public interface AsyncMap<K, V> extends Service {
 
 	public void put(K key, V value, SimpleCallback callback);

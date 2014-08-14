@@ -8,6 +8,7 @@
 	<description>Interface and utilities for asynchronous maps in Java.</description>
 	<url>https://github.com/mxro/async-map</url>
 
+
 	<properties>
 		<module.gwtVersion>2.5.1</module.gwtVersion>
 		<module.importedPackages>

@@ -2,10 +2,10 @@ package de.mxro.async.map;
 
 import java.util.Map;
 
-import de.mxro.async.map.internal.decorators.DelayPutMap;
+import de.mxro.async.map.internal.decorators.CachedMap;
+import de.mxro.async.map.internal.decorators.EnforceAsynchronousPutMap;
 import de.mxro.async.map.internal.decorators.KeyFilterMap;
 import de.mxro.async.map.internal.decorators.LazyStartupMap;
-import de.mxro.async.map.internal.decorators.CachedMap;
 import de.mxro.async.map.internal.decorators.PurgeInvalidValuesMap;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.fn.Function;
@@ -17,13 +17,35 @@ public class AsyncMaps {
 		return new PurgeInvalidValuesMap<K, V>(forMap);
 	}
 
+	/**
+	 * <p>
+	 * Enforces that even putSync operations are performed asynchronously in the
+	 * background.
+	 * <p>
+	 * This is not visible to the caller though (putSync returns immediately).
+	 * 
+	 * @param delay
+	 * @param concurrency
+	 * @param decorated
+	 * @return
+	 */
 	public static <K, V> AsyncMap<K, V> enforceAsynchronousPut(int delay,
 			Concurrency concurrency, AsyncMap<K, V> decorated) {
-		return new DelayPutMap<K, V>(delay, concurrency, decorated);
+		return new EnforceAsynchronousPutMap<K, V>(delay, concurrency,
+				decorated);
 	}
 
-	public static <K, V> AsyncMap<K, V> cacheInMapConnection(
-			Map<K, Object> cache, AsyncMap<K, V> decorated) {
+	/**
+	 * <p>
+	 * Caches writes to this map in a Java {@link Map} object and performs reads
+	 * from this cache whenever possible.
+	 * 
+	 * @param cache
+	 * @param decorated
+	 * @return
+	 */
+	public static <K, V> AsyncMap<K, V> cache(Map<K, Object> cache,
+			AsyncMap<K, V> decorated) {
 		return new CachedMap<K, V>(cache, decorated);
 	}
 

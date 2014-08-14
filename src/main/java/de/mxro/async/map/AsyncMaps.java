@@ -12,6 +12,17 @@ import de.mxro.fn.Function;
 
 public class AsyncMaps {
 
+	/**
+	 * <p>
+	 * If values cannot be read from the map for some reason, they are
+	 * automatically deleted in the map.
+	 * <p>
+	 * This can be useful for example if the serialization format of objects has
+	 * changed and the map only works as a cache.
+	 * 
+	 * @param forMap
+	 * @return
+	 */
 	public final static <K, V> AsyncMap<K, V> purgeInvalidValues(
 			AsyncMap<K, V> forMap) {
 		return new PurgeInvalidValuesMap<K, V>(forMap);
@@ -55,6 +66,10 @@ public class AsyncMaps {
 	}
 
 	/**
+	 * <p>
+	 * Calls the {@link AsyncMap#start(de.mxro.async.callbacks.SimpleCallback)}
+	 * method of this map automatically when an asynchronous operation is
+	 * called.
 	 * 
 	 * @param decorated
 	 * @return

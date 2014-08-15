@@ -24,8 +24,6 @@ public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 	public void get(K key, ValueCallback<V> callback) {
 		get(key, callback, true);
 	}
-
-	
 	
 	private final void get(K key, ValueCallback<V> callback, boolean firstTry) {
 		try {
@@ -70,10 +68,6 @@ public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 	public V getSync(K key) {
 		try {
 			V res = decorated.getSync(key);
-			
-			if (res == null) {
-				return removeAndRegetSync(key);
-			}
 			
 			return res;
 		} catch (Throwable t) {

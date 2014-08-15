@@ -17,6 +17,7 @@ import de.mxro.service.Service;
  */
 public interface AsyncMap<K, V> extends Service {
 
+	
 	public void put(K key, V value, SimpleCallback callback);
 
 	public void get(K key, ValueCallback<V> callback);

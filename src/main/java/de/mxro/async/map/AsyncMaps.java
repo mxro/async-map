@@ -3,12 +3,9 @@ package de.mxro.async.map;
 import java.util.Map;
 
 import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
-import de.mxro.async.map.internal.decorators.CachedMap;
-import de.mxro.async.map.internal.decorators.KeyFilterMap;
-import de.mxro.async.map.internal.decorators.LazyStartupMap;
-import de.mxro.async.map.internal.decorators.PurgeInvalidValuesMap;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.fn.Function;
+
 
 public class AsyncMaps {
 
@@ -25,7 +22,7 @@ public class AsyncMaps {
 	 */
 	public final static <K, V> AsyncMap<K, V> purgeInvalidValues(
 			AsyncMap<K, V> forMap) {
-		return new PurgeInvalidValuesMap<K, V>(forMap);
+		return AsyncMapDecorators.purgeInvalidValues(forMap);
 	}
 
 	/**
@@ -57,12 +54,12 @@ public class AsyncMaps {
 	 */
 	public static <K, V> AsyncMap<K, V> cache(Map<K, Object> cache,
 			AsyncMap<K, V> decorated) {
-		return new CachedMap<K, V>(cache, decorated);
+		return AsyncMapDecorators.cache(cache, decorated);
 	}
 
 	public final static <K, V> AsyncMap<K, V> filterKeys(Function<K, K> filter,
 			AsyncMap<K, V> decorated) {
-		return new KeyFilterMap<K, V>(filter, decorated);
+		return AsyncMapDecorators.filterKeys(filter, decorated);
 	}
 
 	/**
@@ -71,11 +68,10 @@ public class AsyncMaps {
 	 * method of this map automatically when an asynchronous operation is
 	 * called.
 	 * 
-	 * @param decorated
 	 * @return
 	 * @see LazyStartupMap
 	 */
 	public static <K, V> AsyncMap<K, V> lazyStartup(AsyncMap<K, V> decorated) {
-		return new LazyStartupMap<K, V>(decorated);
+		return AsyncMapDecorators.lazyStartup(decorated);
 	}
 }

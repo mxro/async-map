@@ -8,7 +8,7 @@ import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 
-public class CachedMap<K, V> implements AsyncMap<K, V> {
+final class CachedMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 	private final Map<K, Object> cache;

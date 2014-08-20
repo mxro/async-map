@@ -16,7 +16,7 @@ import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.SimpleTimer;
 
-class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
+final class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 	private final int delay;

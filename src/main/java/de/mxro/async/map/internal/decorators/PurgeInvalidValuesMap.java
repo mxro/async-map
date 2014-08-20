@@ -11,7 +11,7 @@ import de.mxro.async.map.operations.MapOperation;
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
-public final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
+final class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 

@@ -16,7 +16,7 @@ import de.mxro.async.map.operations.RemoveOperation;
  * @param <K>
  * @param <V>
  */
-public class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
+final class InterpretStandardOperationsMap<K, V> implements AsyncMap<K, V> {
 
 	private final AsyncMap<K, V> decorated;
 

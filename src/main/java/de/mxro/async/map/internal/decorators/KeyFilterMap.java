@@ -13,7 +13,7 @@ import de.mxro.fn.Function;
  * @author <a href="http://www.mxro.de">Max Rohde</a>
  *
  */
-final class KeyFilterMap<K,V> implements AsyncMap<K, V> {
+class KeyFilterMap<K,V> implements AsyncMap<K, V> {
 
 	private final Function<K, K> filter;
 	private final AsyncMap<K, V> decorated;

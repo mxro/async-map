@@ -21,7 +21,7 @@ import de.mxro.async.map.operations.MapOperation;
  * @param <K>
  * @param <V>
  */
-final class LazyStartupMap<K, V> implements AsyncMap<K, V> {
+class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 
 	private static final String ERROR_MESSAGE = "Lazy start map is not started up. Needs to be started using a call to start or a call to one of its asynchronous operations.";
 	final Value<Boolean> started;

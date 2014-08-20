@@ -2,8 +2,8 @@ package de.mxro.async.map;
 
 import java.util.Map;
 
+import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
 import de.mxro.async.map.internal.decorators.CachedMap;
-import de.mxro.async.map.internal.decorators.EnforceAsynchronousPutMap;
 import de.mxro.async.map.internal.decorators.KeyFilterMap;
 import de.mxro.async.map.internal.decorators.LazyStartupMap;
 import de.mxro.async.map.internal.decorators.PurgeInvalidValuesMap;
@@ -42,8 +42,7 @@ public class AsyncMaps {
 	 */
 	public static <K, V> AsyncMap<K, V> enforceAsynchronousPut(int delay,
 			Concurrency concurrency, AsyncMap<K, V> decorated) {
-		return new EnforceAsynchronousPutMap<K, V>(delay, concurrency,
-				decorated);
+		return AsyncMapDecorators.enforceAsynchronousPut(delay, concurrency, decorated);
 	}
 
 	/**

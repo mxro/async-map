@@ -3,6 +3,7 @@ package de.mxro.async.map.jre.internal;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import de.mxro.async.Deferred;
@@ -228,7 +229,14 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @Override
     public void start(final SimpleCallback callback) {
-        this.executor = Executors.newFixedThreadPool(4);
+        this.executor = Executors.newFixedThreadPool(4, new ThreadFactory() {
+
+            @Override
+            public Thread newThread(final Runnable r) {
+
+                return new Thread(this.getClass() + "->worker");
+            }
+        });
         this.pendingPuts = new ConcurrentHashMap<K, Object>();
         callback.onSuccess();
     }

@@ -5,5 +5,5 @@ MANIFEST.MF
 .project
 .settings
 /META-INF
-.java._trace
+**/*.java._trace
 

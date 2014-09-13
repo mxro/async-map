@@ -22,6 +22,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
     private final AsyncMap<K, V> decorated;
     private ExecutorService executor;
     private ConcurrentHashMap<K, Object> pendingPuts;
+    private final int workerThreads;
 
     private final static Object NULL = Fn.object();
 
@@ -65,6 +66,10 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
+
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Put " + key + " " + value);
+        }
 
         if (value != null) {
             pendingPuts.put(key, value);
@@ -231,7 +236,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @Override
     public void start(final SimpleCallback callback) {
-        this.executor = Executors.newFixedThreadPool(4, new ThreadFactory() {
+        this.executor = Executors.newFixedThreadPool(this.workerThreads, new ThreadFactory() {
 
             @Override
             public Thread newThread(final Runnable r) {
@@ -275,6 +280,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
     public SplitWorkerThreadsMapConnection(final AsyncMap<K, V> connection, final int workerThreads) {
         super();
         this.decorated = connection;
+        this.workerThreads = workerThreads;
 
     }
 

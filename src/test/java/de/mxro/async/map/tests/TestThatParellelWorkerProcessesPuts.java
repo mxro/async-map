@@ -20,7 +20,7 @@ public class TestThatParellelWorkerProcessesPuts {
     final Deferred<Success> _function = new Deferred<Success>() {
       public void get(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
-        map.put("1", "one", _wrap);
+        map.start(_wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function);
@@ -34,9 +34,16 @@ public class TestThatParellelWorkerProcessesPuts {
     final Deferred<Success> _function_2 = new Deferred<Success>() {
       public void get(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
-        map.stop(_wrap);
+        map.put("1", "one", _wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function_2);
+    final Deferred<Success> _function_3 = new Deferred<Success>() {
+      public void get(final ValueCallback<Success> callback) {
+        SimpleCallback _wrap = Async.wrap(callback);
+        map.stop(_wrap);
+      }
+    };
+    AsyncJre.<Success>waitFor(_function_3);
   }
 }

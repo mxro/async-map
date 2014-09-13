@@ -63,7 +63,6 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
 
-        // System.out.println("put "+key);
         if (value != null) {
             pendingPuts.put(key, value);
         } else {

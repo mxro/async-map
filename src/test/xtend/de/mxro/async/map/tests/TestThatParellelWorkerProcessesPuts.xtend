@@ -9,7 +9,7 @@ import org.junit.Test
 class TestThatParellelWorkerProcessesPuts {
 	
 	@Test
-	def test() {
+	def void test() {
 		
 		val map = AsyncMapsJre.divideWork(4, AsyncMaps.hashMap())
 		

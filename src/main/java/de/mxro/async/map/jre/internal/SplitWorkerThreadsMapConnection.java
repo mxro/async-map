@@ -27,37 +27,35 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @SuppressWarnings("unchecked")
     private final void writeValue(final K key, final SimpleCallback callback) {
-        synchronized (this) {
-            final Object value = pendingPuts.get(key);
-            if (value == null) {
-                callback.onSuccess();
-                return;
-            }
 
-            if (!pendingPuts.remove(key, value)) {
-                // do nothing, someone has inserted an updated value.
+        final Object value = pendingPuts.get(key);
+        if (value == null) {
+            callback.onSuccess();
+            return;
+        }
 
-                callback.onSuccess();
-                return;
-            }
+        if (!pendingPuts.remove(key, value)) {
+            // do nothing, someone has inserted an updated value.
 
-            if (value != NULL) {
-                decorated.put(key, (V) value, callback);
-            } else {
-                decorated.remove(key, new SimpleCallback() {
+            callback.onSuccess();
+            return;
+        }
 
-                    @Override
-                    public void onFailure(final Throwable t) {
-                        callback.onFailure(t);
-                    }
+        if (value != NULL) {
+            decorated.put(key, (V) value, callback);
+        } else {
+            decorated.remove(key, new SimpleCallback() {
 
-                    @Override
-                    public void onSuccess() {
-                        callback.onSuccess();
-                    }
-                });
-            }
+                @Override
+                public void onFailure(final Throwable t) {
+                    callback.onFailure(t);
+                }
 
+                @Override
+                public void onSuccess() {
+                    callback.onSuccess();
+                }
+            });
         }
 
     }

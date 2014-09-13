@@ -19,7 +19,7 @@ import de.mxro.concurrency.SimpleTimer;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final AsyncMap<K, V> decorated;
     private final int delay;

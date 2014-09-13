@@ -1,5 +1,6 @@
 package de.mxro.async.map.internal.decorators;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,245 +19,318 @@ import de.mxro.concurrency.SimpleTimer;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
-	private final AsyncMap<K, V> decorated;
-	private final int delay;
-	private final Concurrency concurrency;
-	private final Map<K, List<PutOperation<K, V>>> pendingPuts;
-	private Value<Boolean> timerActive = new Value<Boolean>(false);
-	private SimpleTimer timer = null;
+    private final boolean ENABLE_LOG = true;
 
-	private final static SimpleCallback EMPTY_CALLBACK = new SimpleCallback() {
+    private final AsyncMap<K, V> decorated;
+    private final int delay;
+    private final Concurrency concurrency;
+    private final Map<K, List<PutOperation<K, V>>> pendingPuts;
 
-		@Override
-		public void onFailure(Throwable arg0) {
+    private final Value<Boolean> timerActive = new Value<Boolean>(false);
+    private SimpleTimer timer = null;
 
-		}
+    private final Value<Boolean> processing = new Value<Boolean>(false);
 
-		@Override
-		public void onSuccess() {
+    private final List<SimpleCallback> pendingProcessRequests = new LinkedList<SimpleCallback>();
 
-		}
-	};
+    private final static SimpleCallback EMPTY_CALLBACK = new SimpleCallback() {
 
-	/*
-	 * private final static Object NULL = new Object() {
-	 * 
-	 * };
-	 */
+        @Override
+        public void onFailure(final Throwable arg0) {
 
-	@Override
-	public void put(K key, V value, SimpleCallback callback) {
-		synchronized (pendingPuts) {
+        }
 
-			if (!pendingPuts.containsKey(key)) {
-				pendingPuts.put(key, new LinkedList<PutOperation<K, V>>());
-			}
+        @Override
+        public void onSuccess() {
 
-			final PutOperation<K, V> putOperation = new PutOperation<K, V>(key,
-					value, callback);
+        }
+    };
 
-			pendingPuts.get(key).add(putOperation);
+    /*
+     * private final static Object NULL = new Object() {
+     * 
+     * };
+     */
 
-		}
+    @Override
+    public void put(final K key, final V value, final SimpleCallback callback) {
+        synchronized (pendingPuts) {
 
-		synchronized (timerActive) {
-			if (timerActive.get() == true) {
-				return;
-			}
+            if (!pendingPuts.containsKey(key)) {
+                pendingPuts.put(key, new LinkedList<PutOperation<K, V>>());
+            }
 
-			timerActive.set( true);
+            final PutOperation<K, V> putOperation = new PutOperation<K, V>(key, value, callback);
 
-			timer = concurrency.newTimer().scheduleOnce(delay, new Runnable() {
+            pendingPuts.get(key).add(putOperation);
 
-				@Override
-				public void run() {
+        }
 
-					synchronized (timerActive) {
-						timerActive.set( false);
-						timer = null;
-					}
-					processPuts(EMPTY_CALLBACK);
-				}
-			});
+        synchronized (timerActive) {
+            if (timerActive.get() == true) {
+                return;
+            }
 
-		}
-	}
+            timerActive.set(true);
 
-	private final void processPuts(final SimpleCallback callback) {
-		final Map<K, List<PutOperation<K, V>>> puts;
-		synchronized (pendingPuts) {
-			puts = new HashMap<K, List<PutOperation<K, V>>>(pendingPuts);
+            timer = concurrency.newTimer().scheduleOnce(delay, new Runnable() {
 
-			pendingPuts.clear();
-		}
+                @Override
+                public void run() {
 
-		final CallbackLatch latch = new CallbackLatch(puts.size()) {
+                    synchronized (timerActive) {
+                        timerActive.set(false);
+                        timer = null;
+                    }
+                    processPuts(EMPTY_CALLBACK);
+                }
+            });
 
-			@Override
-			public void onFailed(Throwable t) {
-				callback.onFailure(t);
-			}
+        }
+    }
 
-			@Override
-			public void onCompleted() {
-				callback.onSuccess();
-			}
-		};
-		for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
+    private final void processPuts(final SimpleCallback callback) {
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Test if puts need to be processed");
+        }
 
-			decorated.put(put.getKey(),
-					put.getValue().get(put.getValue().size() - 1).getValue(),
-					new SimpleCallback() {
+        synchronized (processing) {
+            if (processing.get()) {
+                synchronized (pendingProcessRequests) {
+                    if (ENABLE_LOG) {
+                        System.out.println(this + ": Defer processing");
+                    }
+                    pendingProcessRequests.add(callback);
+                    return;
+                }
+            }
+            processing.set(true);
+        }
 
-						@Override
-						public void onFailure(Throwable arg0) {
-							for (PutOperation<K, V> operation : put.getValue()) {
-								operation.getCallback().onFailure(arg0);
-							}
-							latch.registerSuccess();
-						}
+        final Map<K, List<PutOperation<K, V>>> puts;
+        boolean putsEmpty = false;
+        synchronized (pendingPuts) {
+            if (pendingPuts.size() == 0) {
+                putsEmpty = true;
+                puts = null;
+            } else {
 
-						@Override
-						public void onSuccess() {
-							for (PutOperation<K, V> operation : put.getValue()) {
-								operation.getCallback().onSuccess();
-							}
-							latch.registerSuccess();
-						}
-					});
-		}
+                puts = new HashMap<K, List<PutOperation<K, V>>>(pendingPuts);
 
-	}
+                pendingPuts.clear();
 
-	@Override
-	public void get(K key, ValueCallback<V> callback) {
-		synchronized (pendingPuts) {
-			if (pendingPuts.containsKey(key)) {
-				callback.onSuccess(pendingPuts.get(key)
-						.get(pendingPuts.get(key).size() - 1).getValue());
-				return;
-			}
-		}
-		decorated.get(key, callback);
-	}
+            }
+        }
 
-	@Override
-	public V getSync(K key) {
-		synchronized (pendingPuts) {
-			if (pendingPuts.containsKey(key)) {
-				return pendingPuts.get(key)
-						.get(pendingPuts.get(key).size() - 1).getValue();
-			}
-		}
+        if (putsEmpty) {
+            if (ENABLE_LOG) {
+                System.out.println(this + ": Nothing to process");
+            }
+            synchronized (processing) {
+                processing.set(false);
 
-		return decorated.getSync(key);
-	}
+            }
+            callback.onSuccess();
 
-	@Override
-	public void start(SimpleCallback callback) {
-		decorated.start(callback);
-	}
+            triggerPendingProcessOperations();
 
-	@Override
-	public void putSync(K key, V value) {
-		throw new RuntimeException(
-				"Synchronized put not supported on delayed put connection.");
-	}
+            return;
+        }
 
-	@Override
-	public void removeSync(K key) {
+        final CallbackLatch latch = new CallbackLatch(puts.size()) {
 
-		synchronized (pendingPuts) {
-			pendingPuts.remove(key);
-		}
+            @Override
+            public void onFailed(final Throwable t) {
+                synchronized (processing) {
+                    processing.set(false);
 
-		decorated.removeSync(key);
-	}
+                }
+                callback.onFailure(t);
+                triggerPendingProcessOperations();
+            }
 
-	@Override
-	public void remove(K key, SimpleCallback callback) {
-		synchronized (pendingPuts) {
-			pendingPuts.remove(key);
-		}
-		decorated.remove(key, callback);
-	}
+            @Override
+            public void onCompleted() {
+                if (ENABLE_LOG) {
+                    System.out.println(this + ": All processed");
+                }
+                synchronized (processing) {
+                    processing.set(false);
 
-	private final void processAllPuts(final SimpleCallback callback) {
-		processPuts(new SimpleCallback() {
+                }
+                callback.onSuccess();
+                triggerPendingProcessOperations();
+            }
+        };
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Puts to process " + puts.entrySet());
+        }
 
-			@Override
-			public void onFailure(Throwable arg0) {
-				callback.onFailure(arg0);
-			}
+        for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
 
-			@Override
-			public void onSuccess() {
-				synchronized (pendingPuts) {
-					if (pendingPuts.size() == 0) {
-						callback.onSuccess();
-						return;
-					}
-				}
+            decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(), new SimpleCallback() {
 
-				processAllPuts(callback);
+                @Override
+                public void onFailure(final Throwable arg0) {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onFailure(arg0);
+                    }
+                    latch.registerSuccess();
+                }
 
-			}
-		});
-	}
+                @Override
+                public void onSuccess() {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onSuccess();
+                    }
+                    latch.registerSuccess();
+                }
+            });
+        }
 
-	@Override
-	public void stop(final SimpleCallback callback) {
-		processAllPuts(new SimpleCallback() {
+    }
 
-			@Override
-			public void onFailure(Throwable arg0) {
-				callback.onFailure(arg0);
-			}
+    private void triggerPendingProcessOperations() {
+        synchronized (pendingProcessRequests) {
+            final ArrayList<SimpleCallback> pending = new ArrayList<SimpleCallback>(pendingProcessRequests);
+            pendingProcessRequests.clear();
+            for (final SimpleCallback pendingOperation : pending) {
+                processPuts(pendingOperation);
+            }
+        }
+    }
 
-			@Override
-			public void onSuccess() {
-				synchronized (timerActive) {
-					if (timerActive.get() == true) {
-						timer.stop();
-					}
-				}
-				decorated.stop(callback);
-			}
-		});
+    @Override
+    public void get(final K key, final ValueCallback<V> callback) {
+        synchronized (pendingPuts) {
+            if (pendingPuts.containsKey(key)) {
+                callback.onSuccess(pendingPuts.get(key).get(pendingPuts.get(key).size() - 1).getValue());
+                return;
+            }
+        }
+        decorated.get(key, callback);
+    }
 
-	}
+    @Override
+    public V getSync(final K key) {
+        synchronized (pendingPuts) {
+            if (pendingPuts.containsKey(key)) {
+                return pendingPuts.get(key).get(pendingPuts.get(key).size() - 1).getValue();
+            }
+        }
 
-	@Override
-	public void commit(final SimpleCallback callback) {
-		processAllPuts(new SimpleCallback() {
+        return decorated.getSync(key);
+    }
 
-			@Override
-			public void onFailure(Throwable arg0) {
-				callback.onFailure(arg0);
-			}
+    @Override
+    public void start(final SimpleCallback callback) {
+        decorated.start(callback);
+    }
 
-			@Override
-			public void onSuccess() {
-				decorated.commit(callback);
-			}
-		});
+    @Override
+    public void putSync(final K key, final V value) {
+        throw new RuntimeException("Synchronized put not supported on delayed put connection.");
+    }
 
-	}
+    @Override
+    public void removeSync(final K key) {
 
-	
+        synchronized (pendingPuts) {
+            pendingPuts.remove(key);
+        }
 
-	@Override
-	public void performOperation(MapOperation operation) {
-		decorated.performOperation(operation);
-	}
+        decorated.removeSync(key);
+    }
 
-	public EnforceAsynchronousPutMap(int delay, Concurrency con,
-			AsyncMap<K, V> decorated) {
-		super();
-		this.decorated = decorated;
-		this.delay = delay;
-		this.concurrency = con;
-		this.pendingPuts = new HashMap<K, List<PutOperation<K, V>>>();
-	}
+    @Override
+    public void remove(final K key, final SimpleCallback callback) {
+        synchronized (pendingPuts) {
+            pendingPuts.remove(key);
+        }
+        decorated.remove(key, callback);
+    }
+
+    private final void processAllPuts(final SimpleCallback callback) {
+        processPuts(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+
+            @Override
+            public void onSuccess() {
+                synchronized (pendingPuts) {
+                    if (pendingPuts.size() == 0) {
+                        callback.onSuccess();
+                        return;
+                    }
+                }
+
+                processAllPuts(callback);
+
+            }
+        });
+    }
+
+    @Override
+    public void stop(final SimpleCallback callback) {
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Stopping");
+        }
+
+        processAllPuts(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+
+            @Override
+            public void onSuccess() {
+
+                synchronized (timerActive) {
+                    if (timerActive.get() == true) {
+                        timer.stop();
+                    }
+                }
+                if (ENABLE_LOG) {
+                    System.out.println(this + ": Stopped");
+                }
+                decorated.stop(callback);
+            }
+        });
+
+    }
+
+    @Override
+    public void commit(final SimpleCallback callback) {
+        processAllPuts(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+
+            @Override
+            public void onSuccess() {
+                decorated.commit(callback);
+            }
+        });
+
+    }
+
+    @Override
+    public void performOperation(final MapOperation operation) {
+        decorated.performOperation(operation);
+    }
+
+    public EnforceAsynchronousPutMap(final int delay, final Concurrency con, final AsyncMap<K, V> decorated) {
+        super();
+        this.decorated = decorated;
+        this.delay = delay;
+        this.concurrency = con;
+        this.pendingPuts = new HashMap<K, List<PutOperation<K, V>>>();
+    }
 
 }

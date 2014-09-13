@@ -17,7 +17,7 @@ import de.mxro.fn.Success;
 
 public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final AsyncMap<K, V> decorated;
     private ExecutorService executor;

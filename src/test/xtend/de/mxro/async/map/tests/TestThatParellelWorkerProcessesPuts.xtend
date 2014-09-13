@@ -17,6 +17,10 @@ class TestThatParellelWorkerProcessesPuts {
 			map.put("1", "one", Async.wrap(callback))
 		]
 		
+		AsyncJre.waitFor [ callback | 
+			map.put("1", "one", Async.wrap(callback))
+		]
+		
 		AsyncJre.waitFor [ callback |
 			map.stop(Async.wrap(callback))
 		]

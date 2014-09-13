@@ -235,7 +235,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public Thread newThread(final Runnable r) {
-
+                System.out.println("CREATE");
                 return new Thread(this.getClass() + "->worker");
             }
         });

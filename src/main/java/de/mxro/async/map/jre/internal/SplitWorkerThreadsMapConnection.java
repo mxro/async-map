@@ -240,7 +240,6 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public Thread newThread(final Runnable r) {
-
                 return new Thread(r, this.getClass() + "->worker");
             }
         });

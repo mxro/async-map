@@ -35,8 +35,8 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
             if (!pendingPuts.remove(key, value)) {
                 // do nothing, someone has inserted an updated value.
 
-                // throw new IllegalStateException(
-                // "Inserted key could not be removed. Key: "+key+" Value: "+value);
+                callback.onSuccess();
+                return;
             }
 
             if (value != NULL) {

@@ -1,0 +1,7 @@
+package mypackage
+
+
+class HelloWorld {
+	
+	
+}

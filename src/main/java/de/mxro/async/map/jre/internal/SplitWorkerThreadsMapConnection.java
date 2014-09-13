@@ -27,6 +27,9 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @SuppressWarnings("unchecked")
     private final void writeValue(final K key, final SimpleCallback callback) {
+        if (ENABLE_LOG) {
+            System.out.println(this + ": Writing value " + key);
+        }
 
         final Object value = pendingPuts.get(key);
         if (value == null) {

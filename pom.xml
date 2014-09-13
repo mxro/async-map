@@ -83,6 +83,7 @@
 							<!-- <goal>compile</goal> -->
 							<goal>testCompile</goal>
 						</goals>
+						
 						<!-- By default the plugin will look for eclipse settings, and if non 
 							were found will generate to -->
 						<!-- ${basedir}/src/main/generated-sources/xtend -->
@@ -90,6 +91,7 @@
 							: -->
 
 						<configuration>
+							
 							<!-- <outputDirectory>${basedir}/src/main/xtend-gen</outputDirectory> -->
 							<testOutputDirectory>${basedir}/src/test/java</testOutputDirectory>
 						</configuration>

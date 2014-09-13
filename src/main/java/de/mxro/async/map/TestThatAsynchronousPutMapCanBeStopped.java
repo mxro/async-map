@@ -1,4 +1,4 @@
-package de.mxro.async.map.tests;
+package de.mxro.async.map;
 
 import one.utils.jre.concurrent.JreConcurrency;
 
@@ -8,8 +8,6 @@ import de.mxro.async.Async;
 import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
-import de.mxro.async.map.AsyncMap;
-import de.mxro.async.map.AsyncMaps;
 import de.mxro.fn.Success;
 
 public class TestThatAsynchronousPutMapCanBeStopped {

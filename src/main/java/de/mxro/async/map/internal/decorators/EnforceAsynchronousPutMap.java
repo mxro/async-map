@@ -33,18 +33,7 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
     private final List<SimpleCallback> pendingProcessRequests = new LinkedList<SimpleCallback>();
 
-    private final static SimpleCallback EMPTY_CALLBACK = new SimpleCallback() {
-
-        @Override
-        public void onFailure(final Throwable arg0) {
-
-        }
-
-        @Override
-        public void onSuccess() {
-
-        }
-    };
+    private final static SimpleCallback EMPTY_CALLBACK = new EmptyCallback();
 
     /*
      * private final static Object NULL = new Object() {

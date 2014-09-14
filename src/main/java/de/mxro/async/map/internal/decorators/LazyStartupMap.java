@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.internal.Value;
 import de.mxro.async.map.AsyncMap;
@@ -25,7 +26,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     private static final String ERROR_MESSAGE = "Lazy start map is not started up. Needs to be started using a call to start or a call to one of its asynchronous operations.";
     final Value<Boolean> started;
     final AsyncMap<K, V> decorated;
-    final List<SimpleCallbackWrapper> starting;
+    final List<SimpleCallback> starting;
     /**
      * An unsynchronized variable, which allows faster access to the started
      * state.
@@ -33,7 +34,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     boolean started_fast_access;
 
     @Override
-    public void put(final K key, final V value, final SimpleCallbackWrapper callback) {
+    public void put(final K key, final V value, final SimpleCallback callback) {
         if (started_fast_access) {
             decorated.put(key, value, callback);
             return;
@@ -91,7 +92,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     }
 
     @Override
-    public void remove(final K key, final SimpleCallbackWrapper callback) {
+    public void remove(final K key, final SimpleCallback callback) {
         if (started_fast_access) {
             decorated.remove(key, callback);
             return;
@@ -174,7 +175,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     }
 
     @Override
-    public void start(final SimpleCallbackWrapper callback) {
+    public void start(final SimpleCallback callback) {
         synchronized (starting) {
             if (starting.size() > 0) {
                 starting.add(callback);
@@ -186,13 +187,13 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onFailure(final Throwable t) {
-                final ArrayList<SimpleCallbackWrapper> startingCopy;
+                final ArrayList<SimpleCallback> startingCopy;
                 synchronized (starting) {
-                    startingCopy = new ArrayList<SimpleCallbackWrapper>(starting);
+                    startingCopy = new ArrayList<SimpleCallback>(starting);
                     starting.clear();
                 }
 
-                for (final SimpleCallbackWrapper callback : startingCopy) {
+                for (final SimpleCallback callback : startingCopy) {
                     callback.onFailure(t);
                 }
             }
@@ -204,13 +205,13 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
                     started.set(true);
                 }
 
-                final ArrayList<SimpleCallbackWrapper> startingCopy;
+                final ArrayList<SimpleCallback> startingCopy;
                 synchronized (starting) {
-                    startingCopy = new ArrayList<SimpleCallbackWrapper>(starting);
+                    startingCopy = new ArrayList<SimpleCallback>(starting);
                     starting.clear();
                 }
 
-                for (final SimpleCallbackWrapper callback : startingCopy) {
+                for (final SimpleCallback callback : startingCopy) {
                     callback.onSuccess();
                 }
             }
@@ -219,7 +220,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     }
 
     @Override
-    public void stop(final SimpleCallbackWrapper callback) {
+    public void stop(final SimpleCallback callback) {
         if (started_fast_access) {
             decorated.stop(callback);
             return;
@@ -236,7 +237,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
     }
 
     @Override
-    public void commit(final SimpleCallbackWrapper callback) {
+    public void commit(final SimpleCallback callback) {
         if (started_fast_access) {
             decorated.commit(callback);
             return;
@@ -286,7 +287,7 @@ class LazyStartupMap<K, V> implements AsyncMap<K, V> {
         this.started_fast_access = false;
         this.started = new Value<Boolean>(false);
         this.decorated = decorated;
-        this.starting = new LinkedList<SimpleCallbackWrapper>();
+        this.starting = new LinkedList<SimpleCallback>();
     }
 
 }

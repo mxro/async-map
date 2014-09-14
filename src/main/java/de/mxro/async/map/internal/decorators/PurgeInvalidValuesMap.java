@@ -6,132 +6,122 @@ import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 
 /**
- * <p>Use in case seralizations can get outdated in a cache.
+ * <p>
+ * Use in case seralizations can get outdated in a cache.
  * 
  * @author <a href="http://www.mxro.de/">Max Rohde</a>
  * 
  */
 class PurgeInvalidValuesMap<K, V> implements AsyncMap<K, V> {
 
-	private final AsyncMap<K, V> decorated;
+    private final AsyncMap<K, V> decorated;
 
-	@Override
-	public void put(K key, V value, SimpleCallback callback) {
-		decorated.put(key, value, callback);
-	}
+    @Override
+    public void put(final K key, final V value, final SimpleCallback callback) {
+        decorated.put(key, value, callback);
+    }
 
-	@Override
-	public void get(K key, ValueCallback<V> callback) {
-		get(key, callback, true);
-	}
-	
-	private final void get(K key, ValueCallback<V> callback, boolean firstTry) {
-		try {
-			decorated.get(key, callback);		
-		} catch (Throwable t) {
-			if (!firstTry) {
-				throw new RuntimeException(t);
-			}
+    @Override
+    public void get(final K key, final ValueCallback<V> callback) {
+        get(key, callback, true);
+    }
 
-			deleteAndReget(key, callback);
-		}
+    private final void get(final K key, final ValueCallback<V> callback, final boolean firstTry) {
+        try {
+            decorated.get(key, callback);
+        } catch (final Throwable t) {
+            if (!firstTry) {
+                throw new RuntimeException(t);
+            }
 
-	}
+            deleteAndReget(key, callback);
+        }
 
-	private final void deleteAndReget(final K key, final ValueCallback<V> callback) {
-		remove(key, new SimpleCallback() {
+    }
 
-			@Override
-			public void onFailure(Throwable t) {
-				callback.onFailure(t);
-			}
+    private final void deleteAndReget(final K key, final ValueCallback<V> callback) {
+        remove(key, new SimpleCallbackWrapper() {
 
-			@Override
-			public void onSuccess() {
-				get(key, callback, false);
-			}
-		});
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
 
-		 
-	}
+            @Override
+            public void onSuccess() {
+                get(key, callback, false);
+            }
+        });
 
+    }
 
-	
-	
-	@Override
-	public void remove(K key, SimpleCallback callback) {
-		decorated.remove(key, callback);
-	}
+    @Override
+    public void remove(final K key, final SimpleCallback callback) {
+        decorated.remove(key, callback);
+    }
 
-	
-	@Override
-	public V getSync(K key) {
-		try {
-			V res = decorated.getSync(key);
-			
-			return res;
-		} catch (Throwable t) {
-			return removeAndRegetSync(key);
-		}
-		
-	}
+    @Override
+    public V getSync(final K key) {
+        try {
+            final V res = decorated.getSync(key);
 
-	public V removeAndRegetSync(K key) {
-		remove(key, new SimpleCallback() {
-			
-			@Override
-			public void onFailure(Throwable t) {
-				throw new RuntimeException(t);
-			}
-			
-			@Override
-			public void onSuccess() {
-				
-			}
-		});
-		
-		return decorated.getSync(key);
-	}
-	
-	
-	
+            return res;
+        } catch (final Throwable t) {
+            return removeAndRegetSync(key);
+        }
 
-	@Override
-	public void putSync(K key, V value) {
-		decorated.putSync(key, value);
-	}
+    }
 
-	@Override
-	public void removeSync(K key) {
-		decorated.removeSync(key);
-	}
+    public V removeAndRegetSync(final K key) {
+        remove(key, new SimpleCallbackWrapper() {
 
-	
-	
-	
-	@Override
-	public void start(SimpleCallback callback) {
-		decorated.start(callback);
-	}
+            @Override
+            public void onFailure(final Throwable t) {
+                throw new RuntimeException(t);
+            }
 
-	@Override
-	public void stop(SimpleCallback callback) {
-		decorated.stop(callback);
-	}
+            @Override
+            public void onSuccess() {
 
-	@Override
-	public void commit(SimpleCallback callback) {
-		decorated.commit(callback);
-	}
+            }
+        });
 
-	@Override
-	public void performOperation(MapOperation operation) {
-		decorated.performOperation(operation);
-	}
+        return decorated.getSync(key);
+    }
 
-	public PurgeInvalidValuesMap(AsyncMap<K, V> decorated) {
-		super();
-		this.decorated = decorated;
-	}
+    @Override
+    public void putSync(final K key, final V value) {
+        decorated.putSync(key, value);
+    }
+
+    @Override
+    public void removeSync(final K key) {
+        decorated.removeSync(key);
+    }
+
+    @Override
+    public void start(final SimpleCallback callback) {
+        decorated.start(callback);
+    }
+
+    @Override
+    public void stop(final SimpleCallback callback) {
+        decorated.stop(callback);
+    }
+
+    @Override
+    public void commit(final SimpleCallback callback) {
+        decorated.commit(callback);
+    }
+
+    @Override
+    public void performOperation(final MapOperation operation) {
+        decorated.performOperation(operation);
+    }
+
+    public PurgeInvalidValuesMap(final AsyncMap<K, V> decorated) {
+        super();
+        this.decorated = decorated;
+    }
 
 }

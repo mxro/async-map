@@ -11,6 +11,7 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 import de.mxro.fn.Success;
@@ -48,7 +49,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
         if (value != NULL) {
             decorated.put(key, (V) value, callback);
         } else {
-            decorated.remove(key, new SimpleCallback() {
+            decorated.remove(key, new SimpleCallbackWrapper() {
 
                 @Override
                 public void onFailure(final Throwable t) {
@@ -92,7 +93,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public void get(final ValueCallback<Success> callback) {
-                put(key, value, new SimpleCallback() {
+                put(key, value, new SimpleCallbackWrapper() {
 
                     @Override
                     public void onFailure(final Throwable t) {
@@ -115,7 +116,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public void get(final ValueCallback<Success> callback) {
-                remove(key, new SimpleCallback() {
+                remove(key, new SimpleCallbackWrapper() {
 
                     @Override
                     public void onFailure(final Throwable t) {
@@ -173,7 +174,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public void run() {
-                writeValue(key, new SimpleCallback() {
+                writeValue(key, new SimpleCallbackWrapper() {
 
                     @Override
                     public void onFailure(final Throwable t) {
@@ -192,7 +193,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
     @Override
     public void stop(final SimpleCallback callback) {
 
-        commit(new SimpleCallback() {
+        commit(new SimpleCallbackWrapper() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -201,7 +202,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
             @Override
             public void onSuccess() {
-                decorated.stop(new SimpleCallback() {
+                decorated.stop(new SimpleCallbackWrapper() {
 
                     @Override
                     public void onFailure(final Throwable t) {

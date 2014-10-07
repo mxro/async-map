@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<groupId>de.mxro.async.map</groupId>
 	<artifactId>async-map</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.6</version>
 	<description>Interface and utilities for asynchronous maps in Java.</description>
 	<url>https://github.com/mxro/async-map</url>
 

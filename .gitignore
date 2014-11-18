@@ -7,4 +7,5 @@ MANIFEST.MF
 /META-INF
 **/*.java._trace
 **/*_trace
+*._trace
 

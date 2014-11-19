@@ -32,7 +32,7 @@
 		<dependency>
 			<artifactId>concurrency-api</artifactId>
 			<groupId>de.mxro.concurrency</groupId>
-			<version>[0.0.1,)</version>
+			<version>0.0.3</version>
 		</dependency>
 
 		<dependency>

@@ -164,22 +164,22 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
                     new SimpleCallbackWrapper() {
 
-                        @Override
-                        public void onFailure(final Throwable arg0) {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onFailure(arg0);
-                            }
-                            latch.registerSuccess();
-                        }
+                @Override
+                public void onFailure(final Throwable arg0) {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onFailure(arg0);
+                    }
+                    latch.registerSuccess();
+                }
 
-                        @Override
-                        public void onSuccess() {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onSuccess();
-                            }
-                            latch.registerSuccess();
-                        }
-                    });
+                @Override
+                public void onSuccess() {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onSuccess();
+                    }
+                    latch.registerSuccess();
+                }
+            });
         }
 
     }
@@ -218,6 +218,8 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void start(final SimpleCallback callback) {
+        this.isShutdown.set(false);
+
         decorated.start(callback);
     }
 
@@ -272,6 +274,8 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
         if (ENABLE_LOG) {
             System.out.println(this + ": Stopping");
         }
+
+        new RuntimeException("Stopping it.").printStackTrace();
 
         processAllPuts(new SimpleCallbackWrapper() {
 

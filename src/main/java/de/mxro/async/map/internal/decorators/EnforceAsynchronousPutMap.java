@@ -172,22 +172,22 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
                     new SimpleCallbackWrapper() {
 
-                        @Override
-                        public void onFailure(final Throwable arg0) {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onFailure(arg0);
-                            }
-                            latch.registerSuccess();
-                        }
+                @Override
+                public void onFailure(final Throwable arg0) {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onFailure(arg0);
+                    }
+                    latch.registerSuccess();
+                }
 
-                        @Override
-                        public void onSuccess() {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onSuccess();
-                            }
-                            latch.registerSuccess();
-                        }
-                    });
+                @Override
+                public void onSuccess() {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onSuccess();
+                    }
+                    latch.registerSuccess();
+                }
+            });
         }
 
     }
@@ -314,14 +314,18 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
                 if (timerActive.get() || processing.get()) {
 
+                    System.out.println("XXX Call me back!");
+
                     callWhenAllPutsProcessed.add(new Closure<Object>() {
 
                         @Override
                         public void apply(final Object o) {
+                            System.out.println("XXX You did!");
                             final SimpleTimer scheduleOnce = concurrency.newTimer().scheduleOnce(10, new Runnable() {
 
                                 @Override
                                 public void run() {
+                                    System.out.println("XXX The timer");
                                     stop(callback);
                                 }
                             });

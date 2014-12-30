@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import de.mxro.async.Value;
 import de.mxro.async.callbacks.SimpleCallback;
@@ -16,6 +17,7 @@ import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.wrappers.SimpleTimer;
+import de.mxro.fn.Closure;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
@@ -30,6 +32,8 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
     private SimpleTimer timer = null;
 
     private final Value<Boolean> isShutdown = new Value<Boolean>(false);
+
+    private final Vector<Closure<Object>> callWhenAllPutsProcessed = new Vector<Closure<Object>>();
 
     private final Value<Boolean> processing = new Value<Boolean>(false);
 
@@ -158,22 +162,22 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
                     new SimpleCallbackWrapper() {
 
-                @Override
-                public void onFailure(final Throwable arg0) {
-                    for (final PutOperation<K, V> operation : put.getValue()) {
-                        operation.getCallback().onFailure(arg0);
-                    }
-                    latch.registerSuccess();
-                }
+                        @Override
+                        public void onFailure(final Throwable arg0) {
+                            for (final PutOperation<K, V> operation : put.getValue()) {
+                                operation.getCallback().onFailure(arg0);
+                            }
+                            latch.registerSuccess();
+                        }
 
-                @Override
-                public void onSuccess() {
-                    for (final PutOperation<K, V> operation : put.getValue()) {
-                        operation.getCallback().onSuccess();
-                    }
-                    latch.registerSuccess();
-                }
-            });
+                        @Override
+                        public void onSuccess() {
+                            for (final PutOperation<K, V> operation : put.getValue()) {
+                                operation.getCallback().onSuccess();
+                            }
+                            latch.registerSuccess();
+                        }
+                    });
         }
 
     }
@@ -253,6 +257,19 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
                 synchronized (pendingPuts) {
                     if (pendingPuts.size() == 0) {
                         callback.onSuccess();
+
+                        final ArrayList<Closure<Object>> copy = new ArrayList<Closure<Object>>();
+                        synchronized (callWhenAllPutsProcessed) {
+                            copy.addAll(callWhenAllPutsProcessed);
+
+                            callWhenAllPutsProcessed.clear();
+
+                        }
+
+                        for (final Closure<Object> func : copy) {
+                            func.apply(null);
+                        }
+
                         return;
                     }
                 }
@@ -284,13 +301,14 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
                 if (timerActive.get() || processing.get()) {
 
                     System.out.println("was active timer: " + timerActive.get() + " ,, " + processing.get());
-                    try {
-                        Thread.sleep(10);
-                    } catch (final InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    stop(callback);
+
+                    callWhenAllPutsProcessed.add(new Closure<Object>() {
+
+                        @Override
+                        public void apply(final Object o) {
+                            stop(callback);
+                        }
+                    });
 
                     return;
                 }

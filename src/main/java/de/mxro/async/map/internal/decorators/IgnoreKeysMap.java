@@ -21,7 +21,9 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
+
         if (filter.apply(key)) {
+            System.out.println("Filtered " + key);
             callback.onSuccess();
             return;
         }

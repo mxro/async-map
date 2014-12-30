@@ -54,11 +54,10 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
         }
 
-        // assert isShutdown.get() == false :
-        // "Put attempted for shut down connection " + this + " key " + key;
-
         if (isShutdown.get()) {
-            callback.onFailure(new Exception("Cannot put node into shut down map."));
+            callback.onSuccess();
+            // callback.onFailure(new
+            // Exception("Cannot put node into shut down map."));
             return;
         }
 

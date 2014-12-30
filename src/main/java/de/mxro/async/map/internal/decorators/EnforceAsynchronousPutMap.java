@@ -284,6 +284,12 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
                 if (timerActive.get() || processing.get()) {
 
                     System.out.println("was active timer: " + timerActive.get() + " ,, " + processing.get());
+                    try {
+                        Thread.sleep(10);
+                    } catch (final InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     stop(callback);
 
                     return;

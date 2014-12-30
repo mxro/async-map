@@ -21,7 +21,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             callback.onSuccess();
             return;
         }
@@ -30,7 +30,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             callback.onSuccess(null);
             return;
         }
@@ -39,7 +39,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             callback.onSuccess();
             return;
         }
@@ -48,7 +48,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public V getSync(final K key) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             return null;
         }
         return this.decorated.getSync(key);
@@ -56,7 +56,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void putSync(final K key, final V value) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             return;
         }
         this.decorated.putSync(key, value);
@@ -64,7 +64,7 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void removeSync(final K key) {
-        if (!filter.apply(key)) {
+        if (filter.apply(key)) {
             return;
         }
         this.decorated.removeSync(key);

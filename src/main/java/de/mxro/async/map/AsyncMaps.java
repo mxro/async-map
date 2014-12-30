@@ -58,6 +58,11 @@ public class AsyncMaps {
         return AsyncMapDecorators.filterKeys(filter, decorated);
     }
 
+    public final static <K, V> AsyncMap<K, V> ignoreKeys(final Function<K, Boolean> filter,
+            final AsyncMap<K, V> decorated) {
+        return AsyncMapDecorators.ignoreKeys(filter, decorated);
+    }
+
     /**
      * <p>
      * Calls the {@link AsyncMap#start(de.mxro.async.callbacks.SimpleCallback)}

@@ -71,10 +71,9 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
                 @Override
                 public void run() {
 
-                    synchronized (timerActive) {
-                        timerActive.set(false);
-                        timer = null;
-                    }
+                    timerActive.set(false);
+                    timer = null;
+
                     processPuts(EMPTY_CALLBACK);
                 }
             });
@@ -119,10 +118,9 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             if (ENABLE_LOG) {
                 System.out.println(this + ": Nothing to process");
             }
-            synchronized (processing) {
-                processing.set(false);
 
-            }
+            processing.set(false);
+
             callback.onSuccess();
 
             triggerPendingProcessOperations();
@@ -134,10 +132,9 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onFailed(final Throwable t) {
-                synchronized (processing) {
-                    processing.set(false);
 
-                }
+                processing.set(false);
+
                 callback.onFailure(t);
                 triggerPendingProcessOperations();
             }
@@ -147,10 +144,9 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
                 if (ENABLE_LOG) {
                     System.out.println(this + ": All processed");
                 }
-                synchronized (processing) {
-                    processing.set(false);
 
-                }
+                processing.set(false);
+
                 callback.onSuccess();
                 triggerPendingProcessOperations();
             }
@@ -164,22 +160,22 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
                     new SimpleCallbackWrapper() {
 
-                        @Override
-                        public void onFailure(final Throwable arg0) {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onFailure(arg0);
-                            }
-                            latch.registerSuccess();
-                        }
+                @Override
+                public void onFailure(final Throwable arg0) {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onFailure(arg0);
+                    }
+                    latch.registerSuccess();
+                }
 
-                        @Override
-                        public void onSuccess() {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onSuccess();
-                            }
-                            latch.registerSuccess();
-                        }
-                    });
+                @Override
+                public void onSuccess() {
+                    for (final PutOperation<K, V> operation : put.getValue()) {
+                        operation.getCallback().onSuccess();
+                    }
+                    latch.registerSuccess();
+                }
+            });
         }
 
     }
@@ -288,6 +284,8 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             public void onSuccess() {
 
                 if (timerActive.get() || processing.get()) {
+
+                    System.out.println("was active timer: " + timerActive.get() + " ,, " + processing.get());
                     stop(callback);
 
                     return;

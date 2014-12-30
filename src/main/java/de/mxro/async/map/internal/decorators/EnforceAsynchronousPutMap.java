@@ -300,8 +300,6 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
             System.out.println(this + ": Stopping");
         }
 
-        // new RuntimeException("Stopping it.").printStackTrace();
-
         processAllPuts(new SimpleCallbackWrapper() {
 
             @Override
@@ -314,22 +312,20 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
                 if (timerActive.get() || processing.get()) {
 
-                    System.out.println("XXX Call me back!");
-
                     callWhenAllPutsProcessed.add(new Closure<Object>() {
 
                         @Override
                         public void apply(final Object o) {
-                            // System.out.println("XXX You did!");
+
                             concurrency.newTimer().scheduleOnce(10, new Runnable() {
 
                                 @Override
                                 public void run() {
-                                    // System.out.println("XXX The timer");
+
                                     stop(callback);
                                 }
                             });
-                            // scheduleOnce.stop();
+
                         }
                     });
 

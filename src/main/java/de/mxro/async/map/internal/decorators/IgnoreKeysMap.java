@@ -25,6 +25,8 @@ class IgnoreKeysMap<K, V> implements AsyncMap<K, V> {
             callback.onSuccess();
             return;
         }
+        System.out.println("will be put " + key);
+
         this.decorated.put(key, value, callback);
     }
 

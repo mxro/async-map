@@ -21,7 +21,7 @@ import de.mxro.fn.Closure;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
-    private final boolean ENABLE_LOG = true;
+    private final boolean ENABLE_LOG = false;
 
     private final AsyncMap<K, V> decorated;
     private final int delay;
@@ -320,12 +320,12 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
                         @Override
                         public void apply(final Object o) {
-                            System.out.println("XXX You did!");
-                            final SimpleTimer scheduleOnce = concurrency.newTimer().scheduleOnce(10, new Runnable() {
+                            // System.out.println("XXX You did!");
+                            concurrency.newTimer().scheduleOnce(10, new Runnable() {
 
                                 @Override
                                 public void run() {
-                                    System.out.println("XXX The timer");
+                                    // System.out.println("XXX The timer");
                                     stop(callback);
                                 }
                             });

@@ -37,7 +37,22 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        final Object fromCache = this.cache.get(key);
+        this.cache.get(key, new ValueCallback<V>() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess(final V value) {
+                if (value != null) {
+                    callback.onSuccess(value);
+                    return;
+                }
+
+            }
+        });
         if (fromCache != null) {
             if (fromCache == NULL) {
                 callback.onSuccess(null);
@@ -55,7 +70,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     public V getSync(final K key) {
-        final Object fromCache = this.cache.get(key);
+        final Object fromCache = this.cache.getSync(key);
         if (fromCache != null) {
             if (fromCache == NULL) {
                 return null;

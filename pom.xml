@@ -21,8 +21,6 @@
 	<!-- Dependent Modules -->
 	<dependencies>
 
-
-
 		<dependency>
 			<groupId>de.mxro.service</groupId>
 			<artifactId>service-api</artifactId>

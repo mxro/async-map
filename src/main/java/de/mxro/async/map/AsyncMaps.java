@@ -55,6 +55,10 @@ public class AsyncMaps {
         return AsyncMapDecorators.cache(cache, decorated);
     }
 
+    public static <K, V> AsyncMap<K, V> cache(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
+        return AsyncMapDecorators.cache(cache, decorated);
+    }
+
     public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {
         return AsyncMapDecorators.filterKeys(filter, decorated);
     }

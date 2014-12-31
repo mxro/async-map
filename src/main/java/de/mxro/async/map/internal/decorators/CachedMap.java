@@ -15,12 +15,19 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
-        if (value != null) {
-            this.cache.put(key, value);
-        } else {
-            this.cache.put(key, NULL);
-        }
-        decorated.put(key, value, callback);
+
+        decorated.put(key, value, new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                cache.put(key, value, callback);
+            }
+        });
     }
 
     @Override
@@ -62,6 +69,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
                     public void onSuccess(final V value) {
                         callback.onSuccess(value);
 
+                        // placing value in cache
                         cache.put(key, value, new SimpleCallback() {
 
                             @Override
@@ -80,18 +88,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             }
         });
-        if (fromCache != null) {
-            if (fromCache == NULL) {
-                callback.onSuccess(null);
-                return;
-            } else {
-                callback.onSuccess((V) fromCache);
-                return;
-            }
 
-        }
-
-        decorated.get(key, callback);
     }
 
     @SuppressWarnings("unchecked")

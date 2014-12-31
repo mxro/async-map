@@ -70,13 +70,24 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
-        this.cache.remove(key);
-        this.decorated.remove(key, callback);
+
+        this.decorated.remove(key, new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                cache.remove(key, callback);
+            }
+        });
     }
 
     @Override
     public void removeSync(final K key) {
-        this.cache.remove(key);
+        this.cache.removeSync(key);
         this.decorated.removeSync(key);
     }
 

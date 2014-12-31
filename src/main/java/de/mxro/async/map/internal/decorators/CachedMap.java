@@ -51,6 +51,33 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
                     return;
                 }
 
+                decorated.get(key, new ValueCallback<V>() {
+
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        callback.onFailure(t);
+                    }
+
+                    @Override
+                    public void onSuccess(final V value) {
+                        callback.onSuccess(value);
+
+                        cache.put(key, value, new SimpleCallback() {
+
+                            @Override
+                            public void onFailure(final Throwable t) {
+                                throw new RuntimeException(t);
+                            }
+
+                            @Override
+                            public void onSuccess() {
+
+                            }
+                        });
+
+                    }
+                });
+
             }
         });
         if (fromCache != null) {

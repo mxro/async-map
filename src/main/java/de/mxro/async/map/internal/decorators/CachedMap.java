@@ -13,7 +13,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
 
-        decorated.put(key, value, new SimpleCallback() {
+        cache.put(key, value, new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -22,7 +22,20 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                cache.put(key, value, callback);
+                callback.onSuccess();
+
+                decorated.put(key, value, new SimpleCallback() {
+
+                    @Override
+                    public void onFailure(final Throwable t) {
+                        throw new RuntimeException(t);
+                    }
+
+                    @Override
+                    public void onSuccess() {
+
+                    }
+                });
             }
         });
     }

@@ -1,7 +1,5 @@
 package de.mxro.async.map.internal.decorators;
 
-import java.util.Map;
-
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
@@ -102,7 +100,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
         this.decorated.performOperation(operation);
     }
 
-    public CachedMap(final Map<K, Object> cache, final AsyncMap<K, V> decorated) {
+    public CachedMap(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
         super();
         this.decorated = decorated;
         this.cache = cache;

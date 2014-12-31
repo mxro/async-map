@@ -4,6 +4,7 @@ import java.util.Map;
 
 import de.mxro.async.map.AsyncMap;
 import de.mxro.concurrency.Concurrency;
+import de.mxro.fn.Closure;
 import de.mxro.fn.Function;
 
 public class AsyncMapDecorators {
@@ -74,5 +75,9 @@ public class AsyncMapDecorators {
      */
     public static <K, V> AsyncMap<K, V> lazyStartup(final AsyncMap<K, V> decorated) {
         return new LazyStartupMap<K, V>(decorated);
+    }
+
+    public static <K, V> AsyncMap<K, V> trace(final Closure<String> messageReceiver, final AsyncMap<K, V> decorated) {
+        return new TraceMap<K, V>(messageReceiver, decorated);
     }
 }

@@ -4,14 +4,11 @@ import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
-import de.mxro.fn.Fn;
 
 class CachedMap<K, V> implements AsyncMap<K, V> {
 
     private final AsyncMap<K, V> decorated;
     private final AsyncMap<K, V> cache;
-
-    private final static Object NULL = Fn.object();
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
@@ -95,11 +92,8 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     public V getSync(final K key) {
         final Object fromCache = this.cache.getSync(key);
         if (fromCache != null) {
-            if (fromCache == NULL) {
-                return null;
-            } else {
-                return (V) fromCache;
-            }
+
+            return (V) fromCache;
 
         }
 

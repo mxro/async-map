@@ -54,6 +54,18 @@ public class AsyncMapDecorators {
         return new SimpleCachedMap<K, V>(cache, decorated);
     }
 
+    /**
+     * <p>
+     * Caches writes to this map in another map.
+     * 
+     * @param cache
+     * @param decorated
+     * @return
+     */
+    public static <K, V> AsyncMap<K, V> cache(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
+        return new CachedMap<K, V>(cache, decorated);
+    }
+
     public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {
         return new KeyFilterMap<K, V>(filter, decorated);
     }

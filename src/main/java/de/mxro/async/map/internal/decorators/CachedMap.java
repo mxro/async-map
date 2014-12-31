@@ -65,6 +65,10 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
                     public void onSuccess(final V value) {
                         callback.onSuccess(value);
 
+                        if (value == null) {
+                            return;
+                        }
+
                         // placing value in cache
                         cache.put(key, value, new SimpleCallback() {
 

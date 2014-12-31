@@ -51,7 +51,7 @@ public class AsyncMapDecorators {
      * @return
      */
     public static <K, V> AsyncMap<K, V> cache(final Map<K, Object> cache, final AsyncMap<K, V> decorated) {
-        return new CachedMap<K, V>(cache, decorated);
+        return new SimpleCachedMap<K, V>(cache, decorated);
     }
 
     public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {

@@ -41,7 +41,6 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
         decorated.putSync(key, value);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
         this.cache.get(key, new ValueCallback<V>() {

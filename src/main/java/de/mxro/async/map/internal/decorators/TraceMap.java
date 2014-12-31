@@ -6,7 +6,7 @@ import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Closure;
 
-public class TraceMap<K, V> implements AsyncMap<K, V> {
+final class TraceMap<K, V> implements AsyncMap<K, V> {
 
     private final Closure<String> messageReceiver;
     private final AsyncMap<K, V> decorated;

@@ -5,6 +5,7 @@ import java.util.Map;
 import de.mxro.async.map.internal.HashMapAsyncMap;
 import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
 import de.mxro.concurrency.Concurrency;
+import de.mxro.fn.Closure;
 import de.mxro.fn.Function;
 
 public class AsyncMaps {
@@ -78,6 +79,10 @@ public class AsyncMaps {
 
     public static <K, V> AsyncMap<K, V> hashMap() {
         return new HashMapAsyncMap<K, V>();
+    }
+
+    public static <K, V> AsyncMap<K, V> trace(final Closure<String> messageReceiver, final AsyncMap<K, V> decorated) {
+        return AsyncMapDecorators.trace(messageReceiver, decorated);
     }
 
 }

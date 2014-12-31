@@ -98,17 +98,40 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void stop(final SimpleCallback callback) {
-        this.decorated.stop(callback);
+        this.decorated.stop(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                cache.stop(callback);
+            }
+        });
     }
 
     @Override
     public void commit(final SimpleCallback callback) {
-        this.decorated.commit(callback);
+        this.decorated.commit(new SimpleCallback() {
+
+            @Override
+            public void onFailure(final Throwable t) {
+                callback.onFailure(t);
+            }
+
+            @Override
+            public void onSuccess() {
+                cache.commit(callback);
+            }
+        });
     }
 
     @Override
     public void performOperation(final MapOperation operation) {
         this.decorated.performOperation(operation);
+        this.cache.performOperation(operation);
     }
 
     public CachedMap(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {

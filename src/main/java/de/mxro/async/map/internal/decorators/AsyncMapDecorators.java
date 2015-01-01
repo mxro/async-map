@@ -62,7 +62,7 @@ public class AsyncMapDecorators {
      * @param decorated
      * @return
      */
-    public static <K, V> AsyncMap<K, V> cache(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
+    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
         return new CachedMap<K, V>(cache, decorated);
     }
 

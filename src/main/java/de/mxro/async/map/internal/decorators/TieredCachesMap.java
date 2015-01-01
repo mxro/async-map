@@ -42,18 +42,15 @@ class TieredCachesMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public void putSync(final K key, final V value) {
-        if (value != null) {
-            this.primaryCache.putSync(key, value);
-        } else {
-            this.primaryCache.putSync(key, value);
-        }
+
+        primaryCache.putSync(key, value);
 
         secondaryCache.putSync(key, value);
     }
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        this.primaryCache.get(key, new ValueCallback<V>() {
+        primaryCache.get(key, new ValueCallback<V>() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -109,7 +106,6 @@ class TieredCachesMap<K, V> implements AsyncMap<K, V> {
     public V getSync(final K key) {
         final Object fromCache = this.primaryCache.getSync(key);
         if (fromCache != null) {
-
             return (V) fromCache;
 
         }
@@ -120,7 +116,7 @@ class TieredCachesMap<K, V> implements AsyncMap<K, V> {
     @Override
     public void remove(final K key, final SimpleCallback callback) {
 
-        this.secondaryCache.remove(key, new SimpleCallback() {
+        this.primaryCache.remove(key, new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -129,7 +125,7 @@ class TieredCachesMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                primaryCache.remove(key, callback);
+                secondaryCache.remove(key, callback);
             }
         });
     }

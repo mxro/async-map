@@ -58,12 +58,12 @@ public class AsyncMapDecorators {
      * <p>
      * Caches writes to this map in another map.
      * 
-     * @param cache
-     * @param decorated
+     * @param primaryCache
+     * @param secondaryCache
      * @return
      */
-    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
-        return new CachedMap<K, V>(cache, decorated);
+    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> primaryCache, final AsyncMap<K, V> secondaryCache) {
+        return new TieredCachesMap<K, V>(primaryCache, secondaryCache);
     }
 
     public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {

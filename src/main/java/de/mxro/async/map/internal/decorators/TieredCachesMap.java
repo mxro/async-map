@@ -5,15 +5,15 @@ import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 
-class CachedMap<K, V> implements AsyncMap<K, V> {
+class TieredCachesMap<K, V> implements AsyncMap<K, V> {
 
-    private final AsyncMap<K, V> decorated;
-    private final AsyncMap<K, V> cache;
+    private final AsyncMap<K, V> secondaryCache;
+    private final AsyncMap<K, V> primaryCache;
 
     @Override
     public void put(final K key, final V value, final SimpleCallback callback) {
 
-        cache.put(key, value, new SimpleCallback() {
+        primaryCache.put(key, value, new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -24,7 +24,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
             public void onSuccess() {
                 callback.onSuccess();
 
-                decorated.put(key, value, new SimpleCallback() {
+                secondaryCache.put(key, value, new SimpleCallback() {
 
                     @Override
                     public void onFailure(final Throwable t) {
@@ -43,17 +43,17 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     @Override
     public void putSync(final K key, final V value) {
         if (value != null) {
-            this.cache.putSync(key, value);
+            this.primaryCache.putSync(key, value);
         } else {
-            this.cache.putSync(key, value);
+            this.primaryCache.putSync(key, value);
         }
 
-        decorated.putSync(key, value);
+        secondaryCache.putSync(key, value);
     }
 
     @Override
     public void get(final K key, final ValueCallback<V> callback) {
-        this.cache.get(key, new ValueCallback<V>() {
+        this.primaryCache.get(key, new ValueCallback<V>() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -67,7 +67,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
                     return;
                 }
 
-                decorated.get(key, new ValueCallback<V>() {
+                secondaryCache.get(key, new ValueCallback<V>() {
 
                     @Override
                     public void onFailure(final Throwable t) {
@@ -83,7 +83,7 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
                         }
 
                         // placing value in cache
-                        cache.put(key, value, new SimpleCallback() {
+                        primaryCache.put(key, value, new SimpleCallback() {
 
                             @Override
                             public void onFailure(final Throwable t) {
@@ -107,20 +107,20 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
     @SuppressWarnings("unchecked")
     @Override
     public V getSync(final K key) {
-        final Object fromCache = this.cache.getSync(key);
+        final Object fromCache = this.primaryCache.getSync(key);
         if (fromCache != null) {
 
             return (V) fromCache;
 
         }
 
-        return decorated.getSync(key);
+        return secondaryCache.getSync(key);
     }
 
     @Override
     public void remove(final K key, final SimpleCallback callback) {
 
-        this.decorated.remove(key, new SimpleCallback() {
+        this.secondaryCache.remove(key, new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -129,20 +129,20 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                cache.remove(key, callback);
+                primaryCache.remove(key, callback);
             }
         });
     }
 
     @Override
     public void removeSync(final K key) {
-        this.cache.removeSync(key);
-        this.decorated.removeSync(key);
+        this.primaryCache.removeSync(key);
+        this.secondaryCache.removeSync(key);
     }
 
     @Override
     public void start(final SimpleCallback callback) {
-        this.decorated.start(new SimpleCallback() {
+        this.secondaryCache.start(new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -151,14 +151,14 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                cache.start(callback);
+                primaryCache.start(callback);
             }
         });
     }
 
     @Override
     public void stop(final SimpleCallback callback) {
-        this.decorated.stop(new SimpleCallback() {
+        this.secondaryCache.stop(new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -167,14 +167,14 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                cache.stop(callback);
+                primaryCache.stop(callback);
             }
         });
     }
 
     @Override
     public void commit(final SimpleCallback callback) {
-        this.decorated.commit(new SimpleCallback() {
+        this.secondaryCache.commit(new SimpleCallback() {
 
             @Override
             public void onFailure(final Throwable t) {
@@ -183,21 +183,21 @@ class CachedMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess() {
-                cache.commit(callback);
+                primaryCache.commit(callback);
             }
         });
     }
 
     @Override
     public void performOperation(final MapOperation operation) {
-        this.decorated.performOperation(operation);
-        this.cache.performOperation(operation);
+        this.secondaryCache.performOperation(operation);
+        this.primaryCache.performOperation(operation);
     }
 
-    public CachedMap(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
+    public TieredCachesMap(final AsyncMap<K, V> cache, final AsyncMap<K, V> decorated) {
         super();
-        this.decorated = decorated;
-        this.cache = cache;
+        this.secondaryCache = decorated;
+        this.primaryCache = cache;
     }
 
 }

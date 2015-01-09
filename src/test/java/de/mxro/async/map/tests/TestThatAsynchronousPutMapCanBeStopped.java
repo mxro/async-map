@@ -1,12 +1,12 @@
 package de.mxro.async.map.tests;
 
 import de.mxro.async.Async;
-import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.AsyncMaps;
+import de.mxro.async.promise.Deferred;
 import de.mxro.concurrency.jre.JreConcurrency;
 import de.mxro.fn.Success;
 import org.junit.Test;

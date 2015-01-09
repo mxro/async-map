@@ -6,13 +6,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import de.mxro.async.Deferred;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.jre.AsyncJre;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
+import de.mxro.async.promise.Deferred;
 import de.mxro.fn.Fn;
 import de.mxro.fn.Success;
 

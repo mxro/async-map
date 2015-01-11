@@ -92,7 +92,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
         AsyncJre.waitFor(new Deferred<Success>() {
 
             @Override
-            public void get(final ValueCallback<Success> callback) {
+            public void apply(final ValueCallback<Success> callback) {
                 put(key, value, new SimpleCallbackWrapper() {
 
                     @Override
@@ -115,7 +115,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
         AsyncJre.waitFor(new Deferred<Success>() {
 
             @Override
-            public void get(final ValueCallback<Success> callback) {
+            public void apply(final ValueCallback<Success> callback) {
                 remove(key, new SimpleCallbackWrapper() {
 
                     @Override

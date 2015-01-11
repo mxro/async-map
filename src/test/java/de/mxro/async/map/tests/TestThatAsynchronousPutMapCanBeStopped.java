@@ -19,28 +19,28 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     AsyncMap<String, String> _hashMap = AsyncMaps.<String, String>hashMap();
     final AsyncMap<String, String> map = AsyncMaps.<String, String>enforceAsynchronousPut(10, _jreConcurrency, _hashMap);
     final Deferred<Success> _function = new Deferred<Success>() {
-      public void get(final ValueCallback<Success> callback) {
+      public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
         map.start(_wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function);
     final Deferred<Success> _function_1 = new Deferred<Success>() {
-      public void get(final ValueCallback<Success> callback) {
+      public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
         map.put("1", "one", _wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function_1);
     final Deferred<Success> _function_2 = new Deferred<Success>() {
-      public void get(final ValueCallback<Success> callback) {
+      public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
         map.put("2", "two", _wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function_2);
     final Deferred<Success> _function_3 = new Deferred<Success>() {
-      public void get(final ValueCallback<Success> callback) {
+      public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = Async.wrap(callback);
         map.stop(_wrap);
       }

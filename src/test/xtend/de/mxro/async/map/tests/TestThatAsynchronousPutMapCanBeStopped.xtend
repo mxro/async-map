@@ -14,6 +14,7 @@ class TestThatAsynchronousPutMapCanBeStopped {
 		val map = AsyncMaps.enforceAsynchronousPut(10, new JreConcurrency(),
 			AsyncMaps.<String, String>hashMap());
 
+
 		AsyncJre.waitFor [ callback |
 			map.start(Async.wrap(callback));
 		]

@@ -4,7 +4,7 @@ import de.mxro.async.AsyncCommon;
 import de.mxro.async.Operation;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.jre.AsyncJre;
+import de.mxro.async.jre.Async;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.AsyncMaps;
 import de.mxro.async.map.jre.AsyncMapsJre;
@@ -23,27 +23,27 @@ public class TestThatParellelWorkerProcessesPuts {
         map.start(_wrap);
       }
     };
-    AsyncJre.<Success>waitFor(_function);
+    Async.<Success>waitFor(_function);
     final Operation<Success> _function_1 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("1", "one", _wrap);
       }
     };
-    AsyncJre.<Success>waitFor(_function_1);
+    Async.<Success>waitFor(_function_1);
     final Operation<Success> _function_2 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("1", "one", _wrap);
       }
     };
-    AsyncJre.<Success>waitFor(_function_2);
+    Async.<Success>waitFor(_function_2);
     final Operation<Success> _function_3 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.stop(_wrap);
       }
     };
-    AsyncJre.<Success>waitFor(_function_3);
+    Async.<Success>waitFor(_function_3);
   }
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import de.mxro.async.Operation;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.jre.AsyncJre;
+import de.mxro.async.jre.Async;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
@@ -89,7 +89,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @Override
     public void putSync(final K key, final V value) {
-        AsyncJre.waitFor(new Operation<Success>() {
+        Async.waitFor(new Operation<Success>() {
 
             @Override
             public void apply(final ValueCallback<Success> callback) {
@@ -112,7 +112,7 @@ public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, 
 
     @Override
     public void removeSync(final K key) {
-        AsyncJre.waitFor(new Operation<Success>() {
+        Async.waitFor(new Operation<Success>() {
 
             @Override
             public void apply(final ValueCallback<Success> callback) {

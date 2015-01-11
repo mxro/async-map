@@ -1,10 +1,10 @@
 package de.mxro.async.map.tests
 
-import static de.mxro.async.jre.AsyncJre.*
 import de.mxro.async.map.AsyncMaps
 import de.mxro.async.map.jre.AsyncMapsJre
 import org.junit.Test
 import de.mxro.async.AsyncCommon
+import static de.mxro.async.jre.Async.*
 
 class TestThatParellelWorkerProcessesPuts {
 	

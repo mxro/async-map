@@ -1,6 +1,6 @@
 package de.mxro.async.map.tests;
 
-import de.mxro.async.Async;
+import de.mxro.async.AsyncCommon;
 import de.mxro.async.Operation;
 import de.mxro.async.callbacks.SimpleCallback;
 import de.mxro.async.callbacks.ValueCallback;
@@ -20,28 +20,28 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     final AsyncMap<String, String> map = AsyncMaps.<String, String>enforceAsynchronousPut(10, _jreConcurrency, _hashMap);
     final Operation<Success> _function = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = Async.wrap(callback);
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.start(_wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function);
     final Operation<Success> _function_1 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = Async.wrap(callback);
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("1", "one", _wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function_1);
     final Operation<Success> _function_2 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = Async.wrap(callback);
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("2", "two", _wrap);
       }
     };
     AsyncJre.<Success>waitFor(_function_2);
     final Operation<Success> _function_3 = new Operation<Success>() {
       public void apply(final ValueCallback<Success> callback) {
-        SimpleCallback _wrap = Async.wrap(callback);
+        SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.stop(_wrap);
       }
     };

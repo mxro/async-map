@@ -7,8 +7,7 @@
 	<inherits name='de.mxro.async.Async' />
 	<!-- Other module inherits -->
 
-	<!-- Specify the app entry point class. -->
-	<entry-point class='de.mxro.async.internal.DummyEntryPoint' />
+	
 
 	<!-- Specify the paths for translatable code -->
 	<source path=''>

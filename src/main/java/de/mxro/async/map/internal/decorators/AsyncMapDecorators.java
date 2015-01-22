@@ -71,8 +71,9 @@ public class AsyncMapDecorators {
         return new KeyFilterMap<K, V>(filter, decorated);
     }
 
-    public final static <K, V> AsyncMap<K, V> filterValues(final Function<V, V> filter, final AsyncMap<K, V> decorated) {
-        return new ValueFilterMap<K, V>(filter, decorated);
+    public final static <K, V> AsyncMap<K, V> filterValues(final Function<V, V> beforeStorage,
+            final Function<V, V> afterStorage, final AsyncMap<K, V> decorated) {
+        return new ValueFilterMap<K, V>(beforeStorage, afterStorage, decorated);
     }
 
     public final static <K, V> AsyncMap<K, V> ignoreKeys(final Function<K, Boolean> filter,

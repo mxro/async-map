@@ -17,6 +17,7 @@ import de.mxro.fn.Function;
 class ValueFilterMap<K, V> implements AsyncMap<K, V> {
 
     private final Function<V, V> beforeStorage;
+    private final Function<V, V> afterStorage;
     private final AsyncMap<K, V> decorated;
 
     @Override
@@ -35,7 +36,7 @@ class ValueFilterMap<K, V> implements AsyncMap<K, V> {
 
             @Override
             public void onSuccess(final V value) {
-                callback.onSuccess(beforeStorage.apply(value));
+                callback.onSuccess(afterStorage.apply(value));
             }
         });
     }
@@ -47,7 +48,7 @@ class ValueFilterMap<K, V> implements AsyncMap<K, V> {
 
     @Override
     public V getSync(final K key) {
-        return beforeStorage.apply(this.decorated.getSync(key));
+        return afterStorage.apply(this.decorated.getSync(key));
     }
 
     @Override
@@ -80,9 +81,11 @@ class ValueFilterMap<K, V> implements AsyncMap<K, V> {
         this.decorated.performOperation(operation);
     }
 
-    public ValueFilterMap(final Function<V, V> filter, final AsyncMap<K, V> decorated) {
+    public ValueFilterMap(final Function<V, V> beforeStorage, final Function<V, V> afterStorage,
+            final AsyncMap<K, V> decorated) {
         super();
-        this.beforeStorage = filter;
+        this.beforeStorage = beforeStorage;
+        this.afterStorage = afterStorage;
         this.decorated = decorated;
     }
 

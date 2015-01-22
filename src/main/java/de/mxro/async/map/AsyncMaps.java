@@ -55,12 +55,17 @@ public class AsyncMaps {
         return AsyncMapDecorators.cache(cache, decorated);
     }
 
-    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> primaryCache, final AsyncMap<K, V> secondaryCache) {
+    public static <K, V> AsyncMap<K, V> tierCaches(final AsyncMap<K, V> primaryCache,
+            final AsyncMap<K, V> secondaryCache) {
         return AsyncMapDecorators.tierCaches(primaryCache, secondaryCache);
     }
 
     public final static <K, V> AsyncMap<K, V> filterKeys(final Function<K, K> filter, final AsyncMap<K, V> decorated) {
         return AsyncMapDecorators.filterKeys(filter, decorated);
+    }
+
+    public final static <K, V> AsyncMap<K, V> filterValues(final Function<V, V> filter, final AsyncMap<K, V> decorated) {
+        return AsyncMapDecorators.filterValues(filter, decorated);
     }
 
     public final static <K, V> AsyncMap<K, V> ignoreKeys(final Function<K, Boolean> filter,

@@ -20,13 +20,13 @@ public interface AsyncMap<K, V> extends Service {
 
     public void put(K key, V value, SimpleCallback callback);
 
-    public void get(K key, ValueCallback<V> callback);
+    public void putSync(K key, V value);
 
-    public void remove(K key, SimpleCallback callback);
+    public void get(K key, ValueCallback<V> callback);
 
     public V getSync(K key);
 
-    public void putSync(K key, V value);
+    public void remove(K key, SimpleCallback callback);
 
     public void removeSync(K key);
 

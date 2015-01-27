@@ -169,25 +169,32 @@ class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 
         for (final Entry<K, List<PutOperation<K, V>>> put : puts.entrySet()) {
 
-            decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
-                    new SimpleCallbackWrapper() {
+            try {
+                decorated.put(put.getKey(), put.getValue().get(put.getValue().size() - 1).getValue(),
+                        new SimpleCallbackWrapper() {
 
-                        @Override
-                        public void onFailure(final Throwable arg0) {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onFailure(arg0);
-                            }
-                            latch.registerSuccess();
+                    @Override
+                    public void onFailure(final Throwable arg0) {
+                        for (final PutOperation<K, V> operation : put.getValue()) {
+                            operation.getCallback().onFailure(arg0);
                         }
+                        latch.registerSuccess();
+                    }
 
-                        @Override
-                        public void onSuccess() {
-                            for (final PutOperation<K, V> operation : put.getValue()) {
-                                operation.getCallback().onSuccess();
-                            }
-                            latch.registerSuccess();
+                    @Override
+                    public void onSuccess() {
+                        for (final PutOperation<K, V> operation : put.getValue()) {
+                            operation.getCallback().onSuccess();
                         }
-                    });
+                        latch.registerSuccess();
+                    }
+                });
+            } catch (final Throwable t) {
+                for (final PutOperation<K, V> operation : put.getValue()) {
+                    operation.getCallback().onFailure(t);
+                }
+                latch.registerSuccess();
+            }
         }
 
     }

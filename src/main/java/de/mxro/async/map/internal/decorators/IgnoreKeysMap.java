@@ -1,10 +1,10 @@
 package de.mxro.async.map.internal.decorators;
 
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Function;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
 
 /**
  * <P>

@@ -8,16 +8,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 
-import de.mxro.async.Value;
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.flow.CallbackLatch;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.wrappers.SimpleTimer;
 import de.mxro.fn.Closure;
+import delight.async.Value;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+import delight.async.flow.CallbackLatch;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 

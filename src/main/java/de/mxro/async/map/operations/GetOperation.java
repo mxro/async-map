@@ -1,6 +1,6 @@
 package de.mxro.async.map.operations;
 
-import de.mxro.async.callbacks.ValueCallback;
+import delight.async.callbacks.ValueCallback;
 
 /**
  * An object representation of a Get operation on an asynchronous map.

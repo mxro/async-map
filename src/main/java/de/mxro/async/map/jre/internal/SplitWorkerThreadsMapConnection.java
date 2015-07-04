@@ -6,15 +6,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import de.mxro.async.Operation;
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
-import de.mxro.async.jre.Async;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
 import de.mxro.fn.Success;
+import delight.async.Operation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+import delight.async.jre.Async;
 
 public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
 

@@ -1,12 +1,12 @@
 package de.mxro.async.map.internal.decorators;
 
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.GetOperation;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.async.map.operations.RemoveOperation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
 
 /**
  * <p>Forwards standard operations (put, get, remove) to the methods on this map.

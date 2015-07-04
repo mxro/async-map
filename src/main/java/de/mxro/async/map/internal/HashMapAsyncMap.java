@@ -2,10 +2,10 @@ package de.mxro.async.map.internal;
 
 import java.util.HashMap;
 
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
 
 public class HashMapAsyncMap<K, V> implements AsyncMap<K, V> {
 

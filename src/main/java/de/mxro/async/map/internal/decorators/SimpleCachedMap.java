@@ -2,11 +2,11 @@ package de.mxro.async.map.internal.decorators;
 
 import java.util.Map;
 
-import de.mxro.async.callbacks.SimpleCallback;
-import de.mxro.async.callbacks.ValueCallback;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.fn.Fn;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
 
 class SimpleCachedMap<K, V> implements AsyncMap<K, V> {
 

@@ -2,9 +2,9 @@ package de.mxro.async.map.tests
 
 import de.mxro.async.map.AsyncMaps
 import de.mxro.concurrency.jre.JreConcurrency
+import delight.async.AsyncCommon
+import delight.async.jre.Async
 import org.junit.Test
-import de.mxro.async.AsyncCommon
-import de.mxro.async.jre.Async
 
 class TestThatAsynchronousPutMapCanBeStopped {
 

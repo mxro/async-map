@@ -19,6 +19,7 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     AsyncMap<String, String> _hashMap = AsyncMaps.<String, String>hashMap();
     final AsyncMap<String, String> map = AsyncMaps.<String, String>enforceAsynchronousPut(10, _jreConcurrency, _hashMap);
     final Operation<Success> _function = new Operation<Success>() {
+      @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.start(_wrap);
@@ -26,6 +27,7 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     };
     Async.<Success>waitFor(_function);
     final Operation<Success> _function_1 = new Operation<Success>() {
+      @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("1", "one", _wrap);
@@ -33,6 +35,7 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     };
     Async.<Success>waitFor(_function_1);
     final Operation<Success> _function_2 = new Operation<Success>() {
+      @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.put("2", "two", _wrap);
@@ -40,6 +43,7 @@ public class TestThatAsynchronousPutMapCanBeStopped {
     };
     Async.<Success>waitFor(_function_2);
     final Operation<Success> _function_3 = new Operation<Success>() {
+      @Override
       public void apply(final ValueCallback<Success> callback) {
         SimpleCallback _wrap = AsyncCommon.wrap(callback);
         map.stop(_wrap);

@@ -1,6 +1,7 @@
 package de.mxro.async.map.internal.decorators;
 
 import delight.functional.Closure;
+import delight.functional.Function;
 
 import java.util.Map;
 

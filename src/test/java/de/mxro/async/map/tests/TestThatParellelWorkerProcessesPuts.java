@@ -1,17 +1,15 @@
 package de.mxro.async.map.tests;
 
+import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.AsyncMaps;
+import de.mxro.async.map.jre.AsyncMapsJre;
 import delight.async.AsyncCommon;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.functional.Success;
-
 import org.junit.Test;
-
-import de.mxro.async.map.AsyncMap;
-import de.mxro.async.map.AsyncMaps;
-import de.mxro.async.map.jre.AsyncMapsJre;
 
 @SuppressWarnings("all")
 public class TestThatParellelWorkerProcessesPuts {

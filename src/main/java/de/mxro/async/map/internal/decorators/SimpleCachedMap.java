@@ -4,9 +4,9 @@ import java.util.Map;
 
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
-import de.mxro.fn.Fn;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
+import delight.functional.Fn;
 
 class SimpleCachedMap<K, V> implements AsyncMap<K, V> {
 

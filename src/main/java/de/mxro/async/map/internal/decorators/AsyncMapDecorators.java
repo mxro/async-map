@@ -4,8 +4,7 @@ import java.util.Map;
 
 import de.mxro.async.map.AsyncMap;
 import de.mxro.concurrency.Concurrency;
-import de.mxro.fn.Closure;
-import de.mxro.fn.Function;
+import delight.functional.Closure;
 
 public class AsyncMapDecorators {
 

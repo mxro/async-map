@@ -9,12 +9,12 @@ import java.util.concurrent.TimeUnit;
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.internal.decorators.SimpleCallbackWrapper;
 import de.mxro.async.map.operations.MapOperation;
-import de.mxro.fn.Fn;
-import de.mxro.fn.Success;
 import delight.async.Operation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
+import delight.functional.Fn;
+import delight.functional.Success;
 
 public final class SplitWorkerThreadsMapConnection<K, V> implements AsyncMap<K, V> {
 

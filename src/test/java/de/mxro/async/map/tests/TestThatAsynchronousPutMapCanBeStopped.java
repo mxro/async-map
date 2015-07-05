@@ -1,5 +1,7 @@
 package de.mxro.async.map.tests;
 
+import org.junit.Test;
+
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.AsyncMaps;
 import de.mxro.concurrency.jre.JreConcurrency;
@@ -9,7 +11,6 @@ import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.async.jre.Async;
 import delight.functional.Success;
-import org.junit.Test;
 
 @SuppressWarnings("all")
 public class TestThatAsynchronousPutMapCanBeStopped {

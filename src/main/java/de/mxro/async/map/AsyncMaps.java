@@ -1,11 +1,12 @@
 package de.mxro.async.map;
 
+import delight.functional.Closure;
+
 import java.util.Map;
 
 import de.mxro.async.map.internal.HashMapAsyncMap;
 import de.mxro.async.map.internal.decorators.AsyncMapDecorators;
 import de.mxro.concurrency.Concurrency;
-import delight.functional.Closure;
 
 public class AsyncMaps {
 

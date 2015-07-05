@@ -1,10 +1,11 @@
 package de.mxro.async.map.internal.decorators;
 
-import de.mxro.async.map.AsyncMap;
-import de.mxro.async.map.operations.MapOperation;
 import delight.async.callbacks.SimpleCallback;
 import delight.async.callbacks.ValueCallback;
 import delight.functional.Closure;
+
+import de.mxro.async.map.AsyncMap;
+import de.mxro.async.map.operations.MapOperation;
 
 final class TraceMap<K, V> implements AsyncMap<K, V> {
 

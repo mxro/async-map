@@ -1,14 +1,15 @@
 package de.mxro.async.map.internal.decorators;
 
+import delight.async.Value;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.mxro.async.map.AsyncMap;
 import de.mxro.async.map.operations.MapOperation;
-import delight.async.Value;
-import delight.async.callbacks.SimpleCallback;
-import delight.async.callbacks.ValueCallback;
 
 /**
  * <P>

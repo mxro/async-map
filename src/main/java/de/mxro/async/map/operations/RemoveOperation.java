@@ -1,7 +1,8 @@
 package de.mxro.async.map.operations;
 
-import de.mxro.async.map.AsyncMap;
 import delight.async.callbacks.SimpleCallback;
+
+import de.mxro.async.map.AsyncMap;
 
 /**
  * An object representation of a remove operation on an {@link AsyncMap}.

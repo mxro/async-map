@@ -1,11 +1,12 @@
 package de.mxro.async.map;
 
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+
 import de.mxro.async.map.operations.ClearCacheOperation;
 import de.mxro.async.map.operations.GetOperation;
 import de.mxro.async.map.operations.MapOperation;
 import de.mxro.service.Service;
-import delight.async.callbacks.SimpleCallback;
-import delight.async.callbacks.ValueCallback;
 
 /**
  * <p>

@@ -1,5 +1,11 @@
 package de.mxro.async.map.internal.decorators;
 
+import delight.async.Value;
+import delight.async.callbacks.SimpleCallback;
+import delight.async.callbacks.ValueCallback;
+import delight.async.flow.CallbackLatch;
+import delight.functional.Closure;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -13,11 +19,6 @@ import de.mxro.async.map.operations.MapOperation;
 import de.mxro.async.map.operations.PutOperation;
 import de.mxro.concurrency.Concurrency;
 import de.mxro.concurrency.wrappers.SimpleTimer;
-import delight.async.Value;
-import delight.async.callbacks.SimpleCallback;
-import delight.async.callbacks.ValueCallback;
-import delight.async.flow.CallbackLatch;
-import delight.functional.Closure;
 
 class EnforceAsynchronousPutMap<K, V> implements AsyncMap<K, V> {
 

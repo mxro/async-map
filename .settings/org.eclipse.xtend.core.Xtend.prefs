@@ -1,0 +1,10 @@
+//outlet.DEFAULT_OUTPUT.sourceFolder.src/test/java.directory=src/test/java
+BuilderConfiguration.is_project_specific=true
+eclipse.preferences.version=1
+is_project_specific=true
+outlet.DEFAULT_OUTPUT.description=Output folder for generated Java files
+outlet.DEFAULT_OUTPUT.directory=src/test/java
+outlet.DEFAULT_OUTPUT.hideLocalSyntheticVariables=true
+outlet.DEFAULT_OUTPUT.installDslAsPrimarySource=false
+outlet.DEFAULT_OUTPUT.name=DEFAULT_OUTPUT
+outlet.DEFAULT_OUTPUT.userOutputPerSourceFolder=true

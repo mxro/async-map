@@ -1,3 +1,7 @@
+## MOVED
+
+This project has moved to [javadelight/delight-keyvalue](https://github.com/javadelight/delight-keyvalue).
+
 async-map
 =========
 
